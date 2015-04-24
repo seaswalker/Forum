@@ -1,0 +1,45 @@
+.border {
+    border-right: 1px #cccccc solid;
+}
+.index-main {
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #639095;
+    background-color: white;
+    margin-top: 10px;
+}
+.main-search {
+    height: 50px;
+}
+.main-search table {
+    display: block;
+    height: 100%;
+}
+.s_i {
+	display: inline-block;
+	margin-top: 4px;
+}
+.search-btn {
+    height: 36px;
+    margin-top: 4px;
+}
+.section-title {
+    height: 30px;
+    background-color: #f0f0f0;
+    line-height: 30px;
+    padding-left: 10px;
+}
+.child-section-tr {
+    height: 60px;
+}
+.num-td {
+    width: 400px;
+    text-align: right;
+}
+.last-td {
+	width: 250px;
+	text-align: right;
+}
+/*第二列td*/
+.second-td {
+    width: 223px;
+}

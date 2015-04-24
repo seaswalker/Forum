@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forum.dao.UserDao">
+
+	<select id="findAll" resultType="forum.model.User">
+		select * from user
+	</select>
+	
+	<select id="getById" parameterType="int" resultType="forum.model.User">
+		select * from user where id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from user where id = #{id}
+	</delete>
+	
+	<insert id="save" parameterType="forum.model.User">
+		insert into user values(null, #{username}, #{password}, #{avatar}, #{email}, #{visible}, #{isAdmin}, #{isManager})
+	</insert>
+	
+	<update id="update" parameterType="forum.model.User">
+		update user 
+			<set>
+				<if test="username != null">
+					username = #{username},
+				</if>
+				<if test="password != null">
+					password = #{password},
+				</if>
+				<if test="avatar != null">
+					avatar = #{avatar},
+				</if>
+			</set>
+			where id = #{id}
+	</update>
+	
+	<select id="getSectionIds" parameterType="int" resultType="int">
+		select us.sid from user_section us where us.uid = #{userid}
+	</select>
+	
+	<!-- 查找User -->
+	<select id="find" parameterType="forum.model.User" resultType="forum.model.User">
+		select * from user
+			<where>
+				<if test="username != null">
+					and username = #{username}
+				</if>
+				<if test="password != null">
+					and password = #{password}
+				</if>
+				<if test="email != null">
+					and email = #{email}
+				</if>
+			</where>
+	</select>
+	
+</mapper>

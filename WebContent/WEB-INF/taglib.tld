@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>         
+	<tlibversion>1.2</tlibversion>  
+	<jspversion>1.1</jspversion>  
+	<shortname>skywalker</shortname>  
+	<uri>skywalker</uri>         
+	<!-- 定义标签 -->
+	<!-- 判断是否是管理员或者版主 -->
+	<tag>
+	   <name>manager</name>             
+	   <tagclass>forum.tags.ManagerTag</tagclass> 
+	   <attribute>
+		    <name>sid</name>
+		    <required>true</required> 
+		    <rtexprvalue>true</rtexprvalue> 
+	   </attribute>
+	</tag>
+	<!-- 判断是否是作者、管理员、版主 -->
+	<tag>
+		<name>authorOrManager</name>
+		<tagclass>forum.tags.AuthorOrManagerTag</tagclass>
+		<attribute>
+			<name>sid</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

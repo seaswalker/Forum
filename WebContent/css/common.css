@@ -1,0 +1,102 @@
+* {
+    font-family: "微软雅黑";
+}
+body {
+    background-image: url(../images/bg.jpg);
+    background-repeat: repeat;
+}
+.main {
+    width: 980px;
+    margin: 0px auto 0px;
+}
+/*主要字体*/
+.main-font {
+    font-size: 12px;
+}
+/*超链接*/
+a {
+    color: black;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    color: black;
+}
+/*强调字体*/
+.strong-font {
+    font-size: 14px;
+    font-weight: bold;
+}
+/*去掉p的换行*/
+p {
+    margin: 0px;
+}
+.blue-font {
+    font-size: 12px;
+    color: #336699;
+}
+.foot {
+    text-align: center;
+    margin-top: 20px;
+}
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+}
+/*论坛字体*/
+.forum-font {
+    font-family: "宋体";
+    font-size: 14px;
+}
+/*灰色字体*/
+.gray-font {
+    font-size: 12px;
+    color: gray;
+}
+.red-font {
+    font-size: 12px;
+    color: red;
+}
+/*登录div*/
+.l_d {
+    width: 400px;
+    height: 200px;
+    box-shadow: 0px 0px 10px #4D8993;
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+    background-color: white;
+    border-radius: 10px;
+    display: none;
+    z-index: 999;
+}
+.l_d_t {
+    font-family: "宋体";
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.l_d_t_btn {
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+    color: red;
+    cursor: pointer;
+}
+.l_d_c {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    height: 150px;
+}
+.l_d_c table {
+    width:70%;
+    height: 150px;
+}
+/*立即注册*/
+.l_d_r {
+    font-size: 12px;
+    color: #336699;
+}

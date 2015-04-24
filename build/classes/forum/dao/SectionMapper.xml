@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forum.dao.SectionDao">
+
+	<!-- 顶级板块map，查询子版块，不查询最后发表 -->
+	<resultMap type="forum.model.Section" id="ParentMap">
+		<id property="id" column="s_id"/>
+		<result property="name" column="s_name"/>
+		<result property="pid" column="s_pid"/>
+		<result property="manager" column="s_manager"/>
+		<result property="clickcount" column="s_clickcount"/>
+		<result property="articlecount" column="s_articlecount"/>
+		<!-- 返回子版块集合 -->
+		<association property="children" column="s_id" select="getChildrenWithArticle"></association>
+	</resultMap>
+	
+	<!-- 子版块map，不查询子版块，查询最后发表 -->
+	<resultMap type="forum.model.Section" id="ChildMap">
+		<id property="id" column="s_c_id"/>
+		<result property="name" column="s_c_name"/>
+		<result property="pid" column="s_c_pid"/>
+		<result property="manager" column="s_c_manager"/>
+		<result property="clickcount" column="s_c_clickcount"/>
+		<result property="articlecount" column="s_c_articlecount"/>
+		<!-- 查出最后发表的帖子 -->
+		<association property="lastreply" javaType="forum.model.Article">
+			<id property="id" column="a_id"></id>
+			<result property="title" column="a_title"/>
+			<result property="lastreplytime" column="a_lastreplytime"/>
+			<!-- 查出作者的username -->
+			<association property="author" javaType="forum.model.User">
+				<result property="username" column="u_username"/>
+			</association>
+		</association>
+	</resultMap>
+	
+	<select id="findAllById" parameterType="int" resultMap="ParentMap">
+		select  
+			s.id as s_id,
+			s.name as s_name,
+			s.pid as s_pid,
+			s.manager as s_manager,
+			s.clickcount as s_clickcount,
+			s.articlecount as s_articlecount
+				from section s
+					<where>
+						and pid = 0
+						<if test="id > 0">
+							and id = #{id}
+						</if>
+						and visible = true
+					</where>
+	</select>
+	
+	<!-- 获取一个板块的子版块，带最后发表 -->
+	<select id="getChildrenWithArticle" parameterType="int" resultMap="ChildMap">
+		select
+			s.id as s_c_id,
+			s.name as s_c_name,
+			s.pid as s_c_pid,
+			s.manager as s_c_manager,
+			s.clickcount as s_c_clickcount,
+			s.articlecount as s_c_articlecount,
+			
+			a.id as a_id,
+			a.title as a_title,
+			a.lastreplytime as a_lastreplytime,
+			
+			u.username as u_username
+			
+				from section s 
+					left join article a on a.id = s.lastreplyid
+						left join user u on u.id = a.authorid
+							 where s.pid = #{id} and s.visible = true
+	</select>
+	
+	<!-- 子版块 -->
+	<select id="getChildren" parameterType="int" resultMap="ChildMap">
+		select * from section 
+			where visible = true and pid = #{id}
+	</select>
+	
+	<select id="getById" parameterType="int" resultMap="ParentMap">
+		select * from section 
+			where id = #{id} 
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		update section set visible = false where id = #{id}
+	</delete>
+	
+	<insert id="save" parameterType="forum.model.Section">
+		insert into section values(null, #{name}, #{pid}, 
+			<choose>
+				<when test="lastreply != null">
+					#{lastreply.id},
+				</when>
+				<otherwise>
+					0,
+				</otherwise>
+			</choose>
+			#{visible}, #{clickcount}, #{articlecount}, #{manager}
+			)
+	</insert>
+	
+	<update id="update" parameterType="forum.model.Section">
+		update section 
+			<set>
+				name = #{name},
+				pid = #{pid},
+				<if test="manager != null">
+					manager = #{manager},
+				</if>
+				<if test="lastarticle != null">
+					lastarticleid = #{lastarticle.id},
+				</if>
+			</set>
+			where id = #{id}
+	</update>
+	
+	<!-- 批量更新-->
+	<update id="batchUpdate" parameterType="String">
+		${sql}
+	</update>
+	
+</mapper>

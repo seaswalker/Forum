@@ -1,0 +1,83 @@
+.head-title {
+    height: 130px;
+    padding-top: 15px;
+    background-color: #c7dce0;
+    border-radius: 10px;
+}
+/*logo*/
+.title-logo {
+    width: 100px;
+    height: 100px;
+    margin-left: 20px;
+    float: left;
+}
+.title-logo img {
+    width: 100px;
+    height: 100px;
+}
+.title-font {
+    float: left;
+    font-size: 30px;
+    line-height: 100px;
+    margin-left: 20px;
+}
+/*登录部分*/
+.title-login {
+    width: 360px;
+    height: 100px;
+    float: right;
+    margin-top: 20px;
+}
+.p_info {
+    width: 360px;
+    height: 100px;
+    float: right;
+    margin-right: 30px;
+}
+.p_info table {
+    width: 60%;
+    height: 100%;
+}
+.tr_set {
+    text-align: right;
+}
+/*主体部分*/
+.m_main {
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #639095;
+    background-color: white;
+    margin-top: 10px;
+    height: 350px;
+    font-size: 20px;
+    color: green;
+}
+.m_main img {
+    vertical-align: text-bottom;
+}
+.m_content {
+    text-align: center;
+    padding-top: 100px;
+}
+/*跳转链接*/
+.j_link {
+    color: green;
+    text-decoration: underline;
+}
+/*登录错误提示窗口*/
+#e_w {
+	position: fixed;
+	display: none;
+	width: 300px;
+	height: 40px;
+	top: 50%;
+	left: 50%;
+	margin-left: -150px;
+	margin-top: -20px;
+	background-color: #3A7DC4;
+	border-radius: 10px;
+	box-shadow: 0px 0px 5px black;
+	color: white;
+	line-height: 40px;
+	text-align: center;
+	z-index: 999;
+}

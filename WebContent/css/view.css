@@ -1,0 +1,142 @@
+.view-main {
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #639095;
+    background-color: white;
+    margin-top: 10px;
+}
+/*发帖按钮*/
+.post_btn {
+    height:30px;
+    margin-top:5px;
+    cursor: pointer;
+}
+/*内容边框*/
+.content {
+    width: 960px;
+    margin: 0px auto 0px;
+}
+/*返回到列表*/
+.to_list {
+    display: inline-block;
+    width: 80px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border: 1px gray solid;
+    float: right;
+    margin-right: 20px;
+    font-family: "宋体";
+    font-size: 14px;
+    margin-top: 10px;
+}
+/*楼主楼层*/
+.floor_lz {
+    border: 1px gray solid;
+    margin-top: 10px;
+    width: 100%;
+}
+/*回复楼层*/
+.floor_reply {
+    border: 1px gray solid;
+    margin-top: 10px;
+    width: 100%;
+}
+.floor_left {
+    width: 20%;
+    float: left;
+    background-color: #E5EDF2;
+    min-height: 250px;
+    border-collapse: collapse;
+}
+.floor_right {
+    width: 80%;
+    float: left;
+}
+/*点击回复数量*/
+.c_r {
+    height: 40px;
+    text-align: center;
+    border-bottom: 5px #C2D5E3 solid;
+    line-height: 40px;
+    background-color: #E5EDF2;
+}
+.author {
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px #C2D5E3 dashed;
+    width: 20%;
+    background-color: #E5EDF2;
+}
+.avatar {
+	height: 100%;
+}
+.avatar img {
+    width: 120px;
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 28px;
+}
+.title {
+    height: 40px;
+    border-bottom: 5px #C2D5E3 solid;
+    line-height: 40px;
+    padding-left: 10px;
+    font-weight: bold;
+    background-color: #E5EDF2;
+}
+.info {
+    padding-left: 20px;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px #C2D5E3 dashed;
+}
+.info img {
+    vertical-align: text-top;
+}
+/*帖子内容*/
+.post_content {
+    font-family: "宋体";
+    font-size: 14px;
+    padding: 10px 10px 10px 10px;
+    text-indent: 2em;
+    height: 168px;
+    vertical-align: top;
+}
+.btn img {
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+}
+.btn {
+	border-top: 1px #C2D5E3 dashed;
+    line-height: 30px;
+}
+/*楼层信息*/
+.floor_info {
+    display: inline-block;
+    float: right;
+    margin-right: 10px;
+}
+/*类型图片*/
+.type_icon {
+	display: inline-block;
+	vertical-align: middle;
+	float: right;
+	margin-right: 200px;
+	margin-top: 5px;
+}
+/*引用文字*/
+blockquote {
+	color: gray;
+	font-style: oblique;	
+}
+/*显示头像td*/
+.avatar_td {
+	background-color: #E5EDF2;
+	text-align: center;
+	padding: 0px;
+	height: 220px;
+}

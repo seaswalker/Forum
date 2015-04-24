@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forum.dao.ReplyDao">
+
+	<!-- 回复 -->
+	<resultMap type="forum.model.Reply" id="ReplyMap">
+		<id property="id" column="id"/>
+		<result property="content" column="content"/>
+		<result property="articleid" column="articleid"/>
+		<result property="createtime" column="createtime"/>
+		<result property="visible" column="visible" />
+		<association property="author" javaType="forum.model.User">
+			<id property="id" column="id"/>
+			<result property="username" column="username"/>
+			<result property="password" column="password"/>
+			<result property="email" column="email"/>
+			<result property="avatar" column="avatar"/>
+			<result property="isAdmin" column="isAdmin"/>
+			<result property="visible" column="visible"/>
+		</association>
+	</resultMap>
+	
+	<!-- 分页查询 -->
+	<select id="getScrollData" resultMap="ReplyMap">
+		select * from reply r join user u on u.id = r.authorid
+			<!-- 拼接where语句，此处做了简化处理 直接预测可能会用到的条件? -->
+			<include refid="whereSql"></include>
+			<!-- 拼接 order-->
+			order by ${order}
+			<!-- 拼接分页 -->
+			<if test="begin >= 0">
+				<if test="pageSize >= 1">
+					limit #{begin},#{pageSize}
+				</if>
+			</if>
+	</select>
+	
+	<!-- 查询数量 -->
+	<select id="recordsCount" resultType="int">
+		select count(id) from reply r
+			<include refid="whereSql"></include>
+	</select>
+	
+	<insert id="save" parameterType="forum.model.Reply">
+		insert into reply
+			values(null, #{content}, #{createtime}, #{visible}, #{articleid}, #{author.id})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		update reply set visible = false where id = #{id}
+	</delete>
+	
+	<!-- where语句 -->
+	<sql id="whereSql">
+		<if test="where != null">
+			<where>
+				<if test="where.content != null">
+					and r.content like #{where.content}
+				</if>
+				<if test="where.visible != null">
+					and r.visible = #{where.visible}
+				</if>
+				<if test="where.articleid != null">
+					and r.articleid = #{where.articleid}
+				</if>
+				<if test="where.authorid != null">
+					and r.authorid = #{where.authorid}
+				</if>
+			</where>
+		</if>
+	</sql>
+	
+</mapper>

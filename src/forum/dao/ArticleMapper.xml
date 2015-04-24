@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forum.dao.ArticleDao">
+
+	<!-- 普通返回结果类型 -->
+	<resultMap type="forum.model.Article" id="NormalMap">
+		<id property="id" column="a_id"/>
+		<result property="title" column="a_title"/>
+		<result property="content" column="a_content"/>
+		<result property="createtime" column="a_createtime"/>
+		<result property="clickcount" column="a_clickcount"/>
+		<result property="replycount" column="a_replycount"/>
+		<result property="visible" column="a_visible"/>
+		<result property="sectionid" column="a_sectionid"/>
+		<result property="type" column="a_type"/>
+		<result property="lastreplyname" column="a_lastreplyname"/>
+		<result property="lastreplytime" column="a_lastreplytime"/>
+		<!-- 同时查出类别 -->
+		<association property="category" javaType="forum.model.Category">
+			<id property="id" column="c_id"/>
+			<result property="name" column="c_name"/>
+			<result property="visible" column="c_visible"/>		
+		</association>
+		<!-- 作者 -->
+		<association property="author" javaType="forum.model.User">
+			<id property="id" column="u_id"/>
+			<result property="username" column="u_username"/>
+			<result property="password" column="u_password"/>
+			<result property="email" column="u_email"/>
+			<result property="avatar" column="u_avatar"/>
+			<result property="visible" column="u_visible"/>
+		</association>
+	</resultMap>
+	
+	<select id="findAll" resultType="forum.model.Article">
+		select * from article a, category c where a.categoryid = c.id
+	</select>
+	
+	<select id="getById" parameterType="int" resultMap="NormalMap">
+		<include refid="select"></include>
+			where a.id = #{id};
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		update article set visible = false where id = #{id}
+	</delete>
+	
+	<insert id="save" parameterType="forum.model.Article">
+		insert into article values(null, #{title}, #{content}, #{createtime}
+			, #{clickcount}, #{replycount}
+			, #{sectionid}
+			, #{visible}, #{type}, #{category.id}, #{lastreplyname}, #{lastreplytime}, #{author.id}
+		)
+		<!-- 获得生成的主键 -->
+		<selectKey resultType="int" keyProperty="id" keyColumn="id" order="AFTER">
+			select LAST_INSERT_ID() AS id
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="forum.model.Article">
+		update user 
+			set title = #{title},
+			content = #{content}	
+	</update>
+	
+	<!-- 分页查询 -->
+	<select id="getScrollData" resultMap="NormalMap">
+		<include refid="select"></include>
+			<!-- 拼接where语句，此处做了简化处理 直接预测可能会用到的条件? -->
+			<include refid="whereSql"></include>
+			<!-- 拼接 order-->
+			order by ${order}
+			<!-- 拼接分页 -->
+			<if test="begin >= 0">
+				<if test="pageSize >= 1">
+					limit #{begin},#{pageSize}
+				</if>
+			</if>
+	</select>
+	
+	<!-- 查询数量 -->
+	<select id="recordsCount" resultType="int">
+		select count(id) from article a
+			<include refid="whereSql"></include>
+	</select>
+	
+	<sql id="select">
+		select  
+			a.id as a_id,
+			a.title as a_title,
+			a.content as a_content,
+			a.createtime as a_createtime,
+			a.clickcount as a_clickcount,
+			a.replycount as a_replycount,
+			a.visible as a_visible,
+			a.sectionid as a_sectionid,
+			a.type as a_type,
+			a.lastreplyname as a_lastreplyname,
+			a.lastreplytime as a_lastreplytime,
+			
+			u.id as u_id,
+			u.username as u_username,
+			u.password as u_password,
+			u.avatar as u_avatar,
+			u.email as u_email,
+			u.visible as u_visible,
+			
+			c.id as c_id,
+			c.name as c_name,
+			c.visible as c_visible
+		from article a 
+			join user u on u.id = a.authorid 
+			join category c on c.id = a.categoryid
+	</sql>
+	
+	<!-- where语句 -->
+	<sql id="whereSql">
+		<if test="where != null">
+			<where>
+				<if test="where.title != null">
+					and a.title like #{where.title}
+				</if>
+				<if test="where.content != null">
+					and a.content like #{where.content}
+				</if>
+				<if test="where.visible != null">
+					and a.visible = #{where.visible}
+				</if>
+				<if test="where.sectionid != null">
+					and a.sectionid = #{where.sectionid}
+				</if>
+				<if test="where.categoryid != null">
+					and a.categoryid = #{where.categoryid}
+				</if>
+				<if test="where.authorid != null">
+					and a.authorid = #{where.authorid}
+				</if>
+				<if test="where.type != null">
+					and a.type = #{where.type}
+				</if>
+			</where>
+		</if>
+	</sql>
+	
+	<!-- 批量更新 -->
+	<update id="batchUpdate" parameterType="String">
+		${sql}
+	</update>
+	
+</mapper>

@@ -1,0 +1,14 @@
+/*回复修改*/
+.edit-main {
+    width: 980px;
+    margin: 0px auto 0px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #639095;
+    background-color: white;
+    margin-top: 10px;
+}
+.r_e_t {
+	width: 90%;
+	margin: 0px auto 10px;
+}
+

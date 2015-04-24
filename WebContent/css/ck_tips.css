@@ -1,0 +1,9 @@
+/*未登录提示*/
+.p_l_tips {
+	font-family: "宋体";
+	font-size: 14px;
+	color: #336699;
+}
+.p_l_tips a {
+	color:red;
+}

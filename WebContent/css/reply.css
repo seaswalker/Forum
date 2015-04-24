@@ -1,0 +1,12 @@
+.reply_title {
+    line-height: 30px;
+    background-color: #F2F2F2;
+    padding-left: 20px;
+    font-family: "宋体";
+    font-size: 12px;
+    font-weight: bold;
+}
+.reply_table {
+    margin-left: 20px;
+    margin-top: 20px;
+}
