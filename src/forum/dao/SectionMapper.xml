@@ -103,16 +103,15 @@
 			)
 	</insert>
 	
+	<!-- 仅更新名字和版主 -->
 	<update id="update" parameterType="forum.model.Section">
 		update section 
 			<set>
-				name = #{name},
-				pid = #{pid},
+				<if test="name != null">
+					name = #{name},
+				</if>
 				<if test="manager != null">
 					manager = #{manager},
-				</if>
-				<if test="lastarticle != null">
-					lastarticleid = #{lastarticle.id},
 				</if>
 			</set>
 			where id = #{id}

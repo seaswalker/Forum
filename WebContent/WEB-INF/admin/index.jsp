@@ -145,13 +145,25 @@
                 <!--设置版主-->
                 <div class="op_area" id="edit_manager">
                     <table class="section_table" align="center">
+                    	<tr>
+                    		<td>前版主:</td>
+                    		<td>
+                    			<input type="text" id="old_manager" readonly="readonly">
+                    		</td>
+                    	</tr>
                         <tr>
                             <td>
-                             	   请输入版主:
+                             	   新版主:
                             </td>
                             <td>
                                 <input type="text" id="m_m">
                             </td>
+                        </tr>
+                        <tr>
+                        	<td></td>
+                        	<td>
+                                <span style="font-size: 12px;font-family: '宋体';color: gray;">*多个版主用空格分开</span>
+                        	</td>
                         </tr>
                         <tr>
                             <td colspan="2" class="btn_td">

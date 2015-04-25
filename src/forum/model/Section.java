@@ -30,14 +30,20 @@ public class Section implements Serializable {
 	//最后发表的帖子
 	private Article lastreply;
 	
-	public Section(String name, int pid, String manager) {
+	public Section(int id, String name, String manager) {
+		this.id = id;
 		this.name = name;
-		this.pid = pid;
 		this.manager = manager;
 	}
 	
 	public Section() {}
 	
+	public Section(String name, Integer psid, String manager) {
+		this.name = name;
+		this.pid = psid;
+		this.manager = manager;
+	}
+
 	/**
 	 * 利用id、name、pid、manager属性产生一个jsonObject
 	 */

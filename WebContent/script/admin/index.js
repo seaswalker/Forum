@@ -48,6 +48,11 @@
         //渲染板块树
         _load_section_tree();
         _reset_section_ops();
+        //按钮全部变为不可用
+        if(section.section_btns == null) {
+            section.section_btns = $(".btns").children("button");
+        }
+        section.section_btns.attr("disabled", true);
     }
         
       /**
@@ -77,6 +82,7 @@
                         span = $("<span class='folder leaf'></span>");
                         span.html(section.name);
                         span.attr('id', section.id);
+                        span.get(0).setAttribute("old_manager", section.manager == undefined ? '' : section.manager);
                         top_li.append(span);
                         sec_ul = $("<ul></ul>");
                         top_li.append(sec_ul);
@@ -85,6 +91,7 @@
                         sec_li = $("<li></li>");
                         span = $("<span class='leaf'></span>");
                         span.attr('id', section.id);
+                        span.get(0).setAttribute("old_manager", section.manager == undefined ? '' : section.manager);
                         span.html(section.name);
                         sec_li.append(span);
                         sec_ul.append(sec_li);
@@ -112,6 +119,8 @@
             $(this).addClass("tree_li_active");
             //为sid赋值
             section.sid = $(this).attr("id");
+            //设置前版主
+            $("#old_manager").val(this.getAttribute("old_manager"));
             for(var i = 0;i < section.section_btns.length;i ++) {
                 section.section_btns.get(i).removeAttribute("disabled");
             }
@@ -169,7 +178,7 @@
              name.focus();
              return;
          }
-         var url = "admin/section/sa.html";
+         var url = "admin/section/save.html";
          //ajax提交请求
          $.post(
              url,
@@ -178,15 +187,23 @@
                  "name" : name_value,
                  "manager" : manager.val().trim()
              },
-             function(data) {
-                if(data.result == "1") {
-                    show_success(data.message);
-                    //重新加载
-                    _init_section_list_panel();
-                }
-             },
+             _handle_response,
              "json"
          )
+     }
+
+     /**
+      * [_handle_response 处理请求结果]
+      * @param  {[type]} json [返回的json数据]
+      */
+     function _handle_response(json) {
+        if(json.result == "1") {
+            show_success(json.message);
+            //重新加载
+            _init_section_list_panel();
+        }else if(json.result == "0") {
+            show_error(json.message);
+        }
      }
         
     /**
@@ -195,7 +212,12 @@
     function delete_section() {
         if(confirm("您确定删除此板块?")) {
             var url = "admin/section/delete.html";
-            $.post(url, {"sid" : section.id});
+            $.post(
+                url,
+                {"id" : section.sid},
+                _handle_response,
+                "json"
+            );
         }
     }
     
@@ -215,12 +237,10 @@
         $.post(
             url,
             {
-                "sid" : section.sid,
+                "id" : section.sid,
                 "name" : name.val().trim()
             },
-           function(data) {
-                console.log(data);
-            },
+           _handle_response,
            "json"
         )
     }
