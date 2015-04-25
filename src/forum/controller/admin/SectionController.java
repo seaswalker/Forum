@@ -86,6 +86,24 @@ public class SectionController {
 	}
 	
 	/**
+	 * 删除版主
+	 * @param managers 删除后剩下的/新的版主
+	 * @param removeManagers 需要删除的版主
+	 * 多个版主用逗号分隔
+	 */
+	@RequestMapping("/manager/delete")
+	public void manager(Integer id, String removeManagers, String managers, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		if(DataUtil.isValid(id)) {
+			sectionService.deleteManager(id, removeManagers, managers);
+			json.addElement("result", "1").addElement("message", "版主删除成功");
+		}else {
+			json.addElement("result", "0").addElement("message", "版主删除失败");
+		}
+		DataUtil.writeJSON(json, response);
+	}
+	
+	/**
 	 * 根据板块列表生成json数据
 	 */
 	private JSON generateJSON(List<Section> sections) {

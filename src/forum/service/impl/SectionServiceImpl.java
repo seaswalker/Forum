@@ -77,16 +77,27 @@ public class SectionServiceImpl extends BaseServiceImpl<Section> implements Sect
 		return findAllById(-1);
 	}
 	
+	@Override
+	public void deleteManager(int id, String removeManagers, String managers) {
+		//更新板块的manager字段
+		Section section = new Section(id, null, managers);
+		update(section);
+		String sql = "delete from user_section where "
+				+ " sid = " + id
+				+ " and uid in (select id from user where username in (" + removeManagers + "))";
+		sectionDao.batchUpdate(sql);
+	}
+	
 	/**
 	 * 拼揍id集合，in关键字使用
 	 */
 	private String getIds(List<Section> children) {
 		StringBuffer sb = new StringBuffer();
 		for(int i = 0;i < children.size();i ++) {
-			sb.append(children.get(i).getId() + ",");
+			sb.append(children.get(i).getId()).append(",");
 		}
 		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
-
+	
 }

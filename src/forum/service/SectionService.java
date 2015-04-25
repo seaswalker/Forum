@@ -32,4 +32,12 @@ public interface SectionService extends BaseService<Section> {
 	 */
 	public List<Section> findAllById(int id);
 	
+	/**
+	 * 删除版主
+	 * @param id 板块id
+	 * @param managers 留下的版主，可以是多个(逗号分割)
+	 * @param removeManagers 删除的版主
+	 */
+	public void deleteManager(int id, String removeManagers, String managers);
+	
 }

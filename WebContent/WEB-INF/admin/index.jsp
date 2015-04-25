@@ -93,7 +93,8 @@
                   <button name="add_child" disabled>添加子版块</button>
                   <button disabled onclick="delete_section();">删除版块</button>
                   <button name="edit_section" disabled>修改版块</button>
-                  <button name="edit_manager" disabled>设置版主</button>
+                  <button name="reomve_manager" disabled>删除版主</button>
+                  <button name="add_manager" disabled>增加版主</button>
                 </div>
                 
                 <!--功能面板默认界面-->
@@ -142,8 +143,32 @@
                     </tr>
                   </table>
                 </div>
+                <!-- 删除版主 -->
+                <div class="op_area" id="reomve_manager">
+               	 <table class="section_table" align="center">
+                   	<tr>
+                   		<td>
+                   			请选择需要删除的版主:
+                   		</td>
+                   	</tr>
+                   	<tr>
+                   		<td>
+                   			<select id="managers" multiple="multiple">
+                   				<option value="0">---版主---</option>
+                   			</select>
+                   		</td>
+                   	</tr>
+                    <tr>
+                        <td class="btn_td">
+                            <input type="button" value="删除" onclick="remove_manager(this);">
+                            &nbsp;
+                            <span class="error"></span>
+                        </td>
+                    </tr>
+                  </table>
+                </div>
                 <!--设置版主-->
-                <div class="op_area" id="edit_manager">
+                <div class="op_area" id="add_manager">
                     <table class="section_table" align="center">
                     	<tr>
                     		<td>前版主:</td>

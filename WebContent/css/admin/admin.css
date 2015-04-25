@@ -104,6 +104,9 @@
     margin: 20px auto 0px;
     font-family: "宋体";
 }
+.section_table td {
+    font-family: "宋体";
+}
 /*保存按钮td*/
 .btn_td {
     text-align: left;

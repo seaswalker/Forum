@@ -119,17 +119,40 @@
             $(this).addClass("tree_li_active");
             //为sid赋值
             section.sid = $(this).attr("id");
-            //设置前版主
-            $("#old_manager").val(this.getAttribute("old_manager"));
             for(var i = 0;i < section.section_btns.length;i ++) {
                 section.section_btns.get(i).removeAttribute("disabled");
             }
             if(!$(this).hasClass("folder")) {
                 $(section.section_btns.get(0)).attr("disabled", true);
+                //如果尚未设置版主，那么删除版主不可用
+                var old_manager = this.getAttribute("old_manager");
+                if(old_manager == "") {
+                    section.section_btns.get(3).setAttribute("disabled", true);
+                }else {
+                    //设置版主选择列表
+                    _init_manager_select(old_manager);
+                }
                 //添加子版块面板可能是打开的，关闭
                 $("#add_child").hide().prev().show();
             }
         });
+      }
+
+      /**
+       * [_init_manager_select 初始化删除版主下拉列表]
+       * select id为managers
+       * @param  {[type]} old_manager [description]
+       */
+      function _init_manager_select(old_manager) {
+        var array = old_manager.split(",");
+        var manager, option;
+        var $select = $("#managers");
+        for(var i = 0;i < array.length;i ++) {
+            manager = array[i];
+            option = $("<option></option>");
+            option.val(manager).html(manager);
+            $select.append(option);
+        }
       }
 
       /**
@@ -246,26 +269,43 @@
     }
         
     /**
-        修改版主 参数同上
+        删除版主 参数同上
+        下拉列表idmanagers
      */
-    function modify_manager(btn) {
-        var manager = $("#m_m");
+    function remove_manager(btn) {
         var error_span = $(btn).next();
-        if(manager.val().trim() == "") {
-            error_span.html("请输入新的版主id");
-            manager.focus();
+        var selected_options = $("#managers option:gt(0):selected");
+        if(selected_options.length == 0) {
+            error_span.html("请选择需要删除的版主");
             return;
         }
-        var url = "admin/section/um.html";
+        var url = "admin/section/manager/delete.html";
+        //选中的版主
+        var selected_mamagers_str = _generate_managers_str(selected_options);
+         //没有选中的版主
+        var unselected_options = $("#managers option:gt(0):not(:selected)");
+        var unselected_managers_str = _generate_managers_str(unselected_options);
         $.post(
             url,
             {
-                "sid" : section.sid,
-                "manager" : manager.val().trim()
+                "id" : section.sid,
+                "removeManagers" : selected_mamagers_str,
+                "managers" : unselected_managers_str
             },
-            function (data) {
-                console.log(data);
-            },
+            _handle_response,
             "json"
         );
+    }
+
+    /**
+     * [_generate_manages_str 根据选项生成版主字符串，比如skywalker haha]
+     * @param  {[jquery对象]} options [选中/未选中的选项数组]
+     * @return {[String]}
+     */
+    function _generate_managers_str(options) {
+        var array = new Array();
+        options.each(function(index, option) {
+            array.push("'" + $(option).val() + "'");
+        });
+        return array.join(",");
     }
