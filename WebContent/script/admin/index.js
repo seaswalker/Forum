@@ -205,18 +205,37 @@
              name.focus();
              return;
          }
-         var url = "admin/section/save.html";
-         //ajax提交请求
-         $.post(
-             url,
-             {
-                 "psid" : section.sid,
-                 "name" : name_value,
-                 "manager" : manager.val().trim()
-             },
-             _handle_response,
-             "json"
-         )
+         //如果输入了版主，检查是否存在
+         var manager_value = manager.val().trim();
+         if(manager_value != "") {
+             $.post(
+                "user/verify.html",
+                 {
+                     "username" : manager_value
+                 },
+                 function(json) {
+                     if(json.result == "0") {
+                         error_span.html("您输入的用户不存在");
+                         manager.focus();
+                     }else if(json.result == "1") {
+                         //提交
+                         var url = "admin/section/save.html";
+                         //ajax提交请求
+                         $.post(
+                             url,
+                             {
+                                 "psid" : section.sid,
+                                 "name" : name_value,
+                                 "manager" : manager_value
+                             },
+                             _handle_response,
+                             "json"
+                         );
+                     }
+                 },
+                 "json"
+             );
+         }
      }
 
      /**
@@ -354,4 +373,19 @@
             },
             "json"
         );
+    }
+
+    /**
+     * [add_top_section 增加顶级板块]
+     * 和增加子版块相比，仅仅需要把sid设为0
+     */
+    function add_top_section(btn) {
+       section.sid = 0;
+        $(".op_area").each(function(index, op) {
+           if($(this).attr("id") == "add_child") {
+               $(this).show();
+           }else {
+               $(this).hide();
+           }
+        });
     }

@@ -110,11 +110,28 @@ public class SectionServiceImpl extends BaseServiceImpl<Section> implements Sect
 		return json;
 	}
 	
+	/**
+	 * 重写save
+	 * 需要更新关联表
+	 */
+	@Override
+	public void save(Section entity) {
+		super.save(entity);
+		updateUser_Section(entity.getId(), entity.getManager());
+	}
+	
 	@Override
 	public void addManager(int id, String name) {
 		String sql = "update section set manager = concat_ws(' ', manager, '" + name + "') where id = " + id;
 		sectionDao.batchUpdate(sql);
-		sql = "insert into user_section values(null, (select id from user where username = '" + name 
+		updateUser_Section(id, name);
+	}
+	
+	/**
+	 * 更新user-section关联关系
+	 */
+	private void updateUser_Section(int id, String name) {
+		String sql = "insert into user_section values(null, (select id from user where username = '" + name 
 				+ "'), " + id + ")";
 		sectionDao.batchUpdate(sql);
 	}

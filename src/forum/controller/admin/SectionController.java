@@ -44,12 +44,9 @@ public class SectionController {
 	 */
 	@RequestMapping("/save")
 	public void add(Integer psid, String name, String manager, HttpServletResponse response) {
-		if(!DataUtil.isValid(psid) || !DataUtil.isValid(name)) {
-			return;
-		}
+		JSONObject object = new JSONObject();
 		Section section = new Section(name, psid, manager);
 		sectionService.save(section);
-		JSONObject object = new JSONObject();
 		object.addElement("result", "1").addElement("message", "保存成功");
 		DataUtil.writeJSON(object, response);
 	}

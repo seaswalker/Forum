@@ -101,6 +101,10 @@
 			</choose>
 			#{visible}, #{clickcount}, #{articlecount}, #{manager}
 			)
+		<!-- 获得生成的主键 -->
+		<selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER">
+			select last_insert_id() as id
+		</selectKey>
 	</insert>
 	
 	<!-- 仅更新名字和版主 -->

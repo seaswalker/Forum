@@ -44,34 +44,31 @@
         		<!--tab详细地址-->
         		<ul class="tab_detail">
         		  <li name="s_l">
-                <a href="javascript:void(0);">板块列表</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">添加板块</a>
-              </li>
+	                <a href="javascript:void(0);">板块列表</a>
+	              </li>
         		</ul>
-            <!--选项迭代结束-->
-            <!-- 动态网页删除 -->
-            <div class="tab">
-              		帖子类别管理:
-            </div>
-            <ul class="tab_detail">
-              <li>
-                <a href="javascript:void(0);">类别列表</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);">添加类别</a>
-              </li>
-            </ul>
-            <div class="tab">
-              	用户管理:
-            </div>
-            <ul class="tab_detail">
-              <li>
-                <a href="javascript:void(0);">用户列表</a>
-              </li>
-            </ul>
-            <!--动态删除结束-->
+	            <!--选项迭代结束-->
+	            <!-- 动态网页删除 -->
+	            <div class="tab">
+	              		帖子类别管理:
+	            </div>
+	            <ul class="tab_detail">
+	              <li>
+	                <a href="javascript:void(0);">类别列表</a>
+	              </li>
+	              <li>
+	                <a href="javascript:void(0);">添加类别</a>
+	              </li>
+	            </ul>
+	            <div class="tab">
+	              	用户管理:
+	            </div>
+	            <ul class="tab_detail">
+	              <li>
+	                <a href="javascript:void(0);">用户列表</a>
+	              </li>
+	            </ul>
+            	<!--动态删除结束-->
         	</div>
 
           <!--右侧面板-->
@@ -90,6 +87,7 @@
               <!--按钮-->
               <div class="s_l_op">
                 <div class="btns">
+                  <input type="button" onclick="add_top_section(this);" value="添加顶级版块">
                   <button name="add_child" disabled>添加子版块</button>
                   <button disabled onclick="delete_section();">删除版块</button>
                   <button name="edit_section" disabled>修改版块</button>
