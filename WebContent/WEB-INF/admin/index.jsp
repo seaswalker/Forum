@@ -167,32 +167,20 @@
                     </tr>
                   </table>
                 </div>
-                <!--设置版主-->
+                <!--增加版主-->
                 <div class="op_area" id="add_manager">
                     <table class="section_table" align="center">
-                    	<tr>
-                    		<td>前版主:</td>
-                    		<td>
-                    			<input type="text" id="old_manager" readonly="readonly">
-                    		</td>
-                    	</tr>
                         <tr>
                             <td>
-                             	   新版主:
+                             	   版主id:
                             </td>
                             <td>
-                                <input type="text" id="m_m">
+                                <input type="text" id="add_manager_value">
                             </td>
-                        </tr>
-                        <tr>
-                        	<td></td>
-                        	<td>
-                                <span style="font-size: 12px;font-family: '宋体';color: gray;">*多个版主用空格分开</span>
-                        	</td>
                         </tr>
                         <tr>
                             <td colspan="2" class="btn_td">
-                                <input type="button" value="保存" onclick="modify_manager(this);">
+                                <input type="button" value="保存" onclick="add_manager(this);">
                                 &nbsp;
                                 <span class="error"></span>
                             </td>

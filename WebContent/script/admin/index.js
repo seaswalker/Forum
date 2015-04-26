@@ -17,7 +17,7 @@
     function _init_tab() {
         $(".tab").click(function() {
           $(this).next().toggle();
-        });
+        })
     }
 
     /**
@@ -135,6 +135,7 @@
                 //添加子版块面板可能是打开的，关闭
                 $("#add_child").hide().prev().show();
             }
+            _reset_section_ops();   
         });
       }
 
@@ -161,6 +162,9 @@
       function _reset_section_ops() {
         $(".op_area").hide();
         $(".op_default").show();
+        //input和error元素全部清空
+        $(".op_area input[type=text]").val("");
+        $(".op_area .error").html("");
       }
 
       /**
@@ -308,4 +312,46 @@
             array.push("'" + $(option).val() + "'");
         });
         return array.join(",");
+    }
+
+    /**
+     * [add_manager 添加版主]
+     * @param {[DOM]} btn [保存按钮]
+     */
+    function add_manager(btn) {
+        var error_span = $(btn).next();
+        var input = $("#add_manager_value");
+        var input_value = input.val().trim();
+        if(input_value == "") {
+            error_span.html("请输入版主id");
+            input.focus();
+            return;
+        }
+        //向数据库校验此用户名是否存在
+        error_span.css("color", "gray").html("正在检查用户名...");
+        var url = "admin/section/manager/check.html";
+        $.post(
+            url,
+            {
+                "id" : section.sid,
+                "name" : input_value
+            },
+            function (json) {
+                if(json.result == "0") {
+                    error_span.css('color', 'red').html(json.message);
+                }else if(json.result == "1") {
+                    //保存版主
+                    $.post(
+                        "admin/section/manager/add.html",
+                         {
+                            "id" : section.sid,
+                            "name" : input_value
+                         },
+                         _handle_response,
+                         "json"
+                    );
+                }
+            },
+            "json"
+        );
     }

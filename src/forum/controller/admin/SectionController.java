@@ -104,6 +104,39 @@ public class SectionController {
 	}
 	
 	/**
+	 * 添加版主
+	 * @param id 板块id
+	 * @param name 版主id
+	 */
+	@RequestMapping("/manager/add")
+	public void addManager(Integer id, String name, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		if(DataUtil.isValid(id) && DataUtil.isValid(name)) {
+			sectionService.addManager(id, name);
+			json.addElement("result", "1").addElement("message", "版主添加成功");
+		}else {
+			json.addElement("result", "0").addElement("message", "添加失败");
+		}
+		DataUtil.writeJSON(json, response);
+	}
+	
+	/**
+	 * 检查输入的版主id是否存在
+	 * 是否已经版主
+	 */
+	@RequestMapping("/manager/check")
+	public void check(Integer id, String name, HttpServletResponse response) {
+		JSON json = null;
+		if(DataUtil.isValid(id) && DataUtil.isValid(name)) {
+			json = sectionService.checkUser(id, name);
+		}else {
+			json = new JSONObject();
+			json.addElement("reuslt", "0").addElement("message", "参数错误");
+		}
+		DataUtil.writeJSON(json, response);
+	}
+	
+	/**
 	 * 根据板块列表生成json数据
 	 */
 	private JSON generateJSON(List<Section> sections) {

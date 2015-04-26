@@ -122,4 +122,9 @@
 		${sql}
 	</update>
 	
+	<!-- 查询数量 -->
+	<select id="queryCount" resultType="int">
+		${sql}
+	</select>
+	
 </mapper>

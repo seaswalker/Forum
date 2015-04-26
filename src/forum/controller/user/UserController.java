@@ -3,15 +3,19 @@ package forum.controller.user;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import forum.model.User;
 import forum.service.UserService;
+import forum.util.DataUtil;
 import forum.util.StringUtil;
+import forum.util.json.JSONObject;
 
 /**
  * 用户信息修改
@@ -74,5 +78,26 @@ public class UserController {
 		model.addAttribute("message", "头像修改成功");
 		return "message";
 	}
+	
+	/**
+	 * 检查用户名是否存在
+	 * 存在返回1
+	 */
+	@RequestMapping("/verify")
+	@ResponseBody
+	public void verify(String username, HttpServletResponse response) throws IOException {
+		boolean isExists = false;
+		if(DataUtil.isValid(username)) {
+			isExists = userService.isUserExists(username);
+		}
+		JSONObject json = new JSONObject();
+		if(isExists) {
+			json.addElement("result", "1").addElement("message", "此用户名已存在");
+		}else {
+			json.addElement("result", "0");
+		}
+		DataUtil.writeJSON(json, response);
+	}
+	
 	
 }

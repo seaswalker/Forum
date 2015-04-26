@@ -112,7 +112,7 @@ function usernameBlur(object) {
         Register.usernamePassed = _showRegisterError(object, "用户名不能含有空白字符");
     }else {
         object.error_span.innerHTML = "正在检查用户名...";
-        var url = "register/us.html?username=" + value;
+        var url = "user/verify.html?username=" + value;
         getResponseData(url, false, false, "get", _checkUsername, object, null);
     }
 }

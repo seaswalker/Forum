@@ -33,4 +33,9 @@ public interface SectionDao extends BaseDao<Section> {
 	 */
 	public List<Section> findAllById(@Param("id") int id);
 	
+	/**
+	 * 查询数量
+	 */
+	public int queryCount(@Param("sql") String sql);
+	
 }

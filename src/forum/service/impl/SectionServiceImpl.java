@@ -13,6 +13,8 @@ import forum.model.Section;
 import forum.service.SectionService;
 import forum.service.base.BaseServiceImpl;
 import forum.util.DataUtil;
+import forum.util.json.JSON;
+import forum.util.json.JSONObject;
 
 @Service("sectionService")
 public class SectionServiceImpl extends BaseServiceImpl<Section> implements SectionService {
@@ -85,6 +87,35 @@ public class SectionServiceImpl extends BaseServiceImpl<Section> implements Sect
 		String sql = "delete from user_section where "
 				+ " sid = " + id
 				+ " and uid in (select id from user where username in (" + removeManagers + "))";
+		sectionDao.batchUpdate(sql);
+	}
+	
+	@Override
+	public JSON checkUser(int id, String name) {
+		JSONObject json = new JSONObject();
+		String sql = "select count(id) from user where username = '" + name + "'";
+		int userCount = sectionDao.queryCount(sql);
+		if(userCount < 1) {
+			json.addElement("result", "0").addElement("message", "此用户不存在");
+			return json;
+		}
+		sql = "select count(id) from user_section where sid = " + id
+				+ " and uid = (select id from user where username = '" + name + "')";
+		boolean isManager = (sectionDao.queryCount(sql) > 0);
+		if(isManager) {
+			json.addElement("result", "0").addElement("message", "此用户已是版主");
+		}else {
+			json.addElement("result", "1");
+		}
+		return json;
+	}
+	
+	@Override
+	public void addManager(int id, String name) {
+		String sql = "update section set manager = concat_ws(' ', manager, '" + name + "') where id = " + id;
+		sectionDao.batchUpdate(sql);
+		sql = "insert into user_section values(null, (select id from user where username = '" + name 
+				+ "'), " + id + ")";
 		sectionDao.batchUpdate(sql);
 	}
 	

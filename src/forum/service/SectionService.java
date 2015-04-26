@@ -5,6 +5,7 @@ import java.util.List;
 import forum.model.Article;
 import forum.model.Section;
 import forum.service.base.BaseService;
+import forum.util.json.JSON;
 
 public interface SectionService extends BaseService<Section> {
 
@@ -39,5 +40,22 @@ public interface SectionService extends BaseService<Section> {
 	 * @param removeManagers 删除的版主
 	 */
 	public void deleteManager(int id, String removeManagers, String managers);
+	
+	/**
+	 * 增加版主
+	 * @param id 板块id
+	 * @param name 版主name
+	 */
+	public void addManager(int id, String name);
+	
+	/**
+	 * 检查用户是否存在
+	 * 是否已经是所选板块的版主
+	 * @param id板块id
+	 * @param name 用户名
+	 * @return json 直接返回校验的json数据
+	 * TODO 父板块的版主应该算子版块的版主?
+	 */
+	public JSON checkUser(int id, String name);
 	
 }

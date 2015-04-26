@@ -1,7 +1,5 @@
 package forum.controller;
 
-import java.io.IOException;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,25 +32,6 @@ public class RegisterController {
 	@RequestMapping
 	public String register() {
 		return "register";
-	}
-	
-	/**
-	 * 登录验证
-	 */
-	@RequestMapping("/us")
-	@ResponseBody
-	public void verify(String username, HttpServletResponse response) throws IOException {
-		boolean isExists = false;
-		if(DataUtil.isValid(username)) {
-			isExists = userService.isUserExists(username);
-		}
-		JSONObject json = new JSONObject();
-		if(isExists) {
-			json.addElement("result", "1").addElement("message", "此用户名已存在");
-		}else {
-			json.addElement("result", "0");
-		}
-		DataUtil.writeJSON(json, response, true);
 	}
 	
 	/**
