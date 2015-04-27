@@ -128,11 +128,9 @@
 	                     <div class="p_t">
 	                     	<!-- 根据帖子的类型决定图片的路径 -->
 		                     <img src="images/type/${article.type}.png" class="forum_icon">
-		                     &nbsp;
 		                     <a href="forum.html?sid=${sid}&cg=${article.category.id}" class="blue-font">
 			                     [${article.category.name}]
 		                     </a>
-		                     &nbsp;
 		                     <!-- 帖子标题 -->
 		                     <a href="view.html?pid=${article.id}&sid=${article.sectionid}" target="_blank">${article.title}</a>
 	                     </div>

@@ -25,4 +25,11 @@ public interface UserService extends BaseService<User> {
 	 */
 	public List<Integer> getSectionIds(int userid);
 	
+	/**
+	 * 在sid板块下封禁用户uid
+	 * @param uid 用户id
+	 * @param sid 板块id
+	 */
+	public void shield(int uid, int sid);
+	
 }

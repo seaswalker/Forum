@@ -99,5 +99,28 @@ public class UserController {
 		DataUtil.writeJSON(json, response);
 	}
 	
+	/**
+	 * 用户封禁
+	 * @param uid用户id
+	 * @param sid 被那个板块封禁
+	 * @param days 封禁的天数
+	 */
+	@RequestMapping("/shield")
+	public void shield(Integer uid, Integer sid, Integer days, HttpSession session, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		Object object = session.getAttribute("user");
+		if(object == null) {
+			json.addElement("result", "0").addElement("message", "请先登录");
+		}else if(!DataUtil.isValid(uid, sid, days)) {
+			json.addElement("result", "0").addElement("message", "数据有误");
+		}else {
+			User user = (User) object;
+			if(uid == user.getId()) {
+				json.addElement("result", "0").addElement("message", "您不能封禁自己");
+			}else if(user.getSections().contains(sid)) {
+				//TODO 怎么验证总版主?
+			}
+		}
+	}
 	
 }

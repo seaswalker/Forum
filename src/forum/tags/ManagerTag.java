@@ -24,16 +24,16 @@ public class ManagerTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		Object object = pageContext.getSession().getAttribute("user");
 		//如果没有登录那么没有权限
-		if(object != null) {
+		if(object == null) {
+			pageContext.setAttribute("isManager", false);
+		}else {
 			User user = (User) object;
 			if(user.getIsAdmin()) {
-				return EVAL_BODY_INCLUDE;
-			}
-			//版主
-			if(DataUtil.isValid(user.getSections())) {
-				if(user.getSections().contains(sid)) {
-					return EVAL_BODY_INCLUDE;
-				}
+				pageContext.setAttribute("isManager", true);
+			}else if(DataUtil.isValid(user.getSections()) && user.getSections().contains(sid)) {
+				pageContext.setAttribute("isManager", true);
+			}else {
+				pageContext.setAttribute("isManager", false);
 			}
 		}
 		return SKIP_BODY;

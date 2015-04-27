@@ -4,25 +4,42 @@
 
 	<!-- 回复 -->
 	<resultMap type="forum.model.Reply" id="ReplyMap">
-		<id property="id" column="id"/>
-		<result property="content" column="content"/>
-		<result property="articleid" column="articleid"/>
-		<result property="createtime" column="createtime"/>
-		<result property="visible" column="visible" />
+		<id property="id" column="r_id"/>
+		<result property="content" column="r_content"/>
+		<result property="articleid" column="r_articleid"/>
+		<result property="createtime" column="r_createtime"/>
+		<result property="visible" column="r_visible" />
 		<association property="author" javaType="forum.model.User">
-			<id property="id" column="id"/>
-			<result property="username" column="username"/>
-			<result property="password" column="password"/>
-			<result property="email" column="email"/>
-			<result property="avatar" column="avatar"/>
-			<result property="isAdmin" column="isAdmin"/>
-			<result property="visible" column="visible"/>
+			<id property="id" column="u_id"/>
+			<result property="username" column="u_username"/>
+			<result property="password" column="u_password"/>
+			<result property="email" column="u_email"/>
+			<result property="avatar" column="u_avatar"/>
+			<result property="isAdmin" column="u_isAdmin"/>
+			<result property="visible" column="u_visible"/>
+			<result property="isManager" column="u_isManager"/>
 		</association>
 	</resultMap>
 	
 	<!-- 分页查询 -->
 	<select id="getScrollData" resultMap="ReplyMap">
-		select * from reply r join user u on u.id = r.authorid
+		select 
+		
+			r.id as r_id,
+			r.content as r_content,
+			r.articleid as r_articleid,
+			r.createtime as r_createtime,
+			r.visible as r_visible,
+			u.id as u_id,
+			u.username as u_username,
+			u.password as u_password,
+			u.email as u_email,
+			u.avatar as u_avatar,
+			u.isAdmin as u_isAdmin,
+			u.visible as u_visible,
+			u.isManager as u_isManager
+			
+			from reply r join user u on u.id = r.authorid
 			<!-- 拼接where语句，此处做了简化处理 直接预测可能会用到的条件? -->
 			<include refid="whereSql"></include>
 			<!-- 拼接 order-->

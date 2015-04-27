@@ -24,98 +24,22 @@
     <script src="ckeditor/ckeditor.js"></script>
     <script src="script/ListenerUtil.js"></script>
     <script src="script/post.js"></script>
+    <script src="script/view.js"></script>
     <script type="text/javascript">
     	ListenerUtil.addListener(window, "load", config, false);
-    	
-    	//全局变量 记录ckeditor
-    	var ckeditor = null;
-    	//全局变量记录板块id
-    	var sid = 0;
-    	
-    	function config() {
-            //配置分页url
-            var pid = ${pid};
-            var url = "view.html?pid=" + pid + "&pn=";
-            Jump.url = url;
-            //设置sid
-            sid = document.getElementById("sid").value;
-        };
-        
-        /*
-        	检查是否登录，没有登录
-        	显示登录div
-        */
-        function _checkLogin() {
-        	var isLogin = document.getElementById("login");
-        	if(isLogin.value == "0") {
-        		//修改登录div title
-        		var title = document.getElementById("l_d_t_t");
-        		title.innerHTML = "您必须先登录才能继续执行本操作:";
-        		show_login();
-        		return false;
-        	}
-        	return true;
-        }
-        
-        //改变帖子类型
-        function changeType(pid, type) {
-        	if(_checkLogin()) {
-        		var url = "view/type.html?pid=" + pid + "&type=" + type + "&sid=" + sid;
-        		window.location.href = url;
-        	}
-        }
-        
-        //删除帖子
-        function _deleteArticle(pid) {
-        	if(_checkLogin() && _confirm("您确定删除此帖子及以下所有回复?")) {
-        		window.location.href = "view/delete.html?pid=" + pid + "&sid=" + sid;
-        	}
-        }
-        
-        /*
-                              回复
-          isReply --如果是回复楼层true
-       	      楼主 false
-          span --点击的按钮所在的span
-        */
-        function _reply(isReply, span) {
-        	if(_checkLogin()) {
-                if(isReply) {
-                    //获取同楼层下回复所在的td
-                    var td = span.parentNode.parentNode.previousElementSibling.children[1];
-                    //应该引用的内容所在元素
-                    var contentArea;
-                    if(td.children[0] == undefined) {
-                        contentArea = td;
-                    }else if(td.children[0].nodeName == "BLOCKQUOTE") {
-                        contentArea = td.children[1];
-                    }else {
-                        contentArea = td.children[0];
-                    }
-                    //设置到ckeditor的引用文字
-                    var quote = "<blockquote>" + contentArea.innerHTML + "</blockquote>";
-                    CKEDITOR.instances.ckeditor.setData(quote);
-                }
-        		document.getElementById("reply_table").scrollIntoView();
-        	}
-        }
-        
-        //删除回复
-        function _deleteReply(rid, pid) {
-        	if(_checkLogin()) {
-        		var url = "reply/delete.html?rid=" + rid + "&pid=" + pid + "&sid=" + sid;
-       			window.location.href = url;
-        	}
-        }
-        
-        //帖子修改
-        function _editReply(pid) {
-        	if(_checkLogin()) {
-        		var url = "view/edit.html?pid=" + pid + "&sid=" + sid;
-       			window.location.href = url;
-        	}
-        }
-        
+	    //全局变量 记录ckeditor
+	  	var ckeditor = null;
+		//全局变量记录板块id
+		var sid = 0;
+		
+		function config() {
+			//配置分页url
+		    var pid = ${pid};
+		    var url = "view.html?pid=" + pid + "&pn=";
+		    Jump.url = url;
+		    //设置sid
+		    sid = document.getElementById("sid").value;
+		};
     </script>
 </head>
 <body>
@@ -156,7 +80,7 @@
 								</td>
 								<td class="title">
 									<a href="forum.html?sid=${article.sectionid}&cg=${article.category.id}">[技术交流]</a>
-									&nbsp;${article.title}
+									${article.title}
 									<!-- 显示类型图片 -->
 									<c:choose>
 										<c:when test="${article.type == 2}">
@@ -171,7 +95,7 @@
 	                       <tr>
 	                       		<td class="author main-font">
 	                       			&nbsp;&nbsp;
-	                                <a href="#">${article.author.username}</a>
+	                                <a href="#" class="author_link">${article.author.username}</a>
 	                       		</td>
 	                       		<td class="main-font info">
 	                       			<img src="images/info.gif">&nbsp;&nbsp;
@@ -198,7 +122,8 @@
 		                                <img src="images/edit.png">
 		                                <span class="main-font" style="cursor:pointer;" onclick="_editReply(${article.id});">修改</span>
 	                                </skywalker:authorOrManager>
-	                                <skywalker:manager sid="${article.sectionid}">
+	                                <skywalker:manager sid="${article.sectionid}"></skywalker:manager>
+	                                <c:if test="${isManager}">
 		                                <c:if test="${article.type != 2}">
 			                                <img src="images/elite.png">
 			                                <span class="main-font" style="cursor:pointer;" onclick="changeType(${article.id}, 2);">加精</span>
@@ -211,7 +136,10 @@
 			                                <img src="images/normal.png">
 			                                <span class="main-font" style="cursor:pointer;" onclick="changeType(${article.id}, 1);">恢复默认</span>
 			                            </c:if>
-			                         </skywalker:manager>
+		                                <img src="images/shield.png">
+		                                <span class="main-font" style="cursor:pointer;" onclick="show_shield(${article.author.id}, ${article.sectionid});">小黑屋</span>
+	                                </c:if>
+			                         
 	                       		</td>
 	                       </tr>
 	                    </table>
@@ -223,7 +151,7 @@
 	                    	<tr>
 	                    		<td class="author main-font">
 	                    			&nbsp;&nbsp;
-	                                <a href="#">${reply.author.username}</a>
+	                                <a href="#" class="author_link">${reply.author.username}</a>
 	                    		</td>
 	                    		<td class="main-font info">
 	                                <img src="images/info.gif">&nbsp;&nbsp;
@@ -245,8 +173,12 @@
 		                    		<td class="btn">
 		                                <img src="images/fastreply.gif">
 		                                <span class="main-font" style="cursor:pointer;" onclick="_reply(true, this);">回复</span>
-		                                <img src="images/delete.png">
-		                                <span class="main-font" style="cursor:pointer" onclick="_deleteReply(${reply.id}, ${article.id});">删除</span>
+		                                <c:if test="${isManager}">
+			                                <img src="images/delete.png">
+			                                <span class="main-font" style="cursor:pointer" onclick="_deleteReply(${reply.id}, ${article.id});">删除</span>
+			                                <img src="images/shield.png">
+		                                	<span class="main-font" style="cursor:pointer;" onclick="show_shield(${reply.author.id}, ${article.sectionid});">小黑屋</span>
+		                                </c:if>
 		                    		</td>
 		                    	</tr>
 		                    	</c:when>
@@ -286,6 +218,34 @@
 	            </form>
             </div>
         </div>
+     </div>
+     <!-- 小黑屋天数 -->
+     <div id="shield_window">
+     	<table>
+     		<tr>
+     			<td>小黑屋天数:</td>
+     			<td>
+     				<input type="text" id="shield_days_value">
+     			</td>
+     		</tr>
+     		<tr>
+     			<td></td>
+     			<td class="gray-font">
+     				*(1-10天)
+     			</td>
+     		</tr>
+     		<tr>
+     			<td></td>
+     			<td><span id="shield_error" class="error"></span></td>
+     		</tr>
+     		<tr>
+     			<td></td>
+     			<td>
+     				<button onclick="do_shield();">确认</button>
+     				<button onclick="close_shield();">取消</button>
+     			</td>
+     		</tr>
+     	</table>
      </div>
      
      <!-- 尾巴 -->
