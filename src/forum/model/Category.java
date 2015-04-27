@@ -2,6 +2,9 @@ package forum.model;
 
 import java.io.Serializable;
 
+import forum.util.json.JSON;
+import forum.util.json.JSONObject;
+
 /**
  * 帖子类别
  * @author skywalker
@@ -28,6 +31,15 @@ public class Category implements Serializable {
 	public Category(int id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+	
+	/**
+	 * 产生一个json对象
+	 */
+	public JSON getJSON() {
+		JSON json = new JSONObject();
+		json.addElement("id", String.valueOf(id)).addElement("name", name);
+		return json;
 	}
 
 	public boolean isVisible() {

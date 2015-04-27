@@ -20,6 +20,7 @@
     font-size: 30px;
     line-height: 100px;
     margin-left: 20px;
+    font-family: "微软雅黑";
 }
 /*登录部分*/
 .title-login {
@@ -35,7 +36,7 @@
     margin-right: 30px;
 }
 .p_info table {
-    width: 60%;
+    width: 70%;
     height: 100%;
 }
 .tr_set {

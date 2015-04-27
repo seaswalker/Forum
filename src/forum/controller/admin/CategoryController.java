@@ -3,14 +3,17 @@ package forum.controller.admin;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import forum.model.Category;
 import forum.service.CategoryService;
 import forum.util.DataUtil;
+import forum.util.json.JSONArray;
+import forum.util.json.JSONObject;
 
 /**
  * 后台帖子类别管理
@@ -18,7 +21,8 @@ import forum.util.DataUtil;
  *
  */
 @Controller("adminCategoryController")
-@RequestMapping("/admin/cg")
+@RequestMapping("/admin/category")
+@ResponseBody
 public class CategoryController {
 	
 	@Resource(name = "categoryService")
@@ -28,66 +32,47 @@ public class CategoryController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	public String list(Model model) {
+	public void list(HttpServletResponse response) {
 		List<Category> categories = categoryService.findAll();
-		model.addAttribute("categories", categories);
-		return "admin/category/list";
+		JSONArray array = new JSONArray();
+		for(Category category : categories) {
+			array.addObject(category.getJSON());
+		}
+		DataUtil.writeJSON(array, response);
 	}
 	
 	/**
-	 * 删
+	 * 删除
 	 */
 	@RequestMapping("/delete")
-	public String delete(int id, Model model) {
-		categoryService.delete(id);
-		model.addAttribute("message", "类别删除成功");
-		return "admin/message";
-	}
-	
-	/**
-	 * 转向修改
-	 */
-	@RequestMapping("/update")
-	public String update(int id, Model model) {
-		Category category = categoryService.getById(id);
-		model.addAttribute("category", category);
-		model.addAttribute("id", id);
-		return "admin/category/saveUI";
-	}
-	
-	/**
-	 * 修改
-	 */
-	@RequestMapping("/su")
-	public String su(Integer id, String name, Model model) {
-		if(!DataUtil.isValid(name)) {
-			model.addAttribute("error", "请输入类别名称");
-			return "admin/category/saveUI";
+	public void delete(Integer id, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		if(DataUtil.isValid(id)) {
+			categoryService.delete(id);
+			json.addElement("result", "1").addElement("message", "类别删除成功");
+		}else {
+			json.addElement("result", "0").addElement("message", "类别删除失败");
 		}
-		categoryService.update(new Category(id, name));
-		model.addAttribute("message", "类别修改成功");
-		return "admin/message";
+		DataUtil.writeJSON(json, response);
 	}
 	
 	/**
-	 * 转向添加
+	 * 保存
+	 * 如果id < 1添加否则修改
 	 */
-	@RequestMapping("/add")
-	public String add() {
-		return "admin/category/saveUI";
-	}
-	
-	/**
-	 * 添加
-	 */
-	@RequestMapping("/sa")
-	public String sa(String name, Model model) {
-		if(!DataUtil.isValid(name)) {
-			model.addAttribute("error", "请输入类别名称");
-			return "admin/category/saveUI";
+	@RequestMapping("/save")
+	public void save(Integer id, String name, HttpServletResponse response) {
+		JSONObject json = new JSONObject();
+		if(DataUtil.isValid(name)) {
+			if(DataUtil.isValid(id)) {
+				categoryService.update(new Category(id, name));
+			}else {
+				categoryService.save(new Category(name));
+			}
+			json.addElement("result", "1").addElement("message", "类别保存成功");
+		}else {
+			json.addElement("result", "0").addElement("message", "类别保存失败");
 		}
-		categoryService.save(new Category(name));
-		model.addAttribute("message", "类别添加成功");
-		return "admin/message";
+		DataUtil.writeJSON(json, response);
 	}
 }

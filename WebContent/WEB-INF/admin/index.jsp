@@ -53,11 +53,8 @@
 	              		帖子类别管理:
 	            </div>
 	            <ul class="tab_detail">
-	              <li>
+	              <li name="c_l">
 	                <a href="javascript:void(0);">类别列表</a>
-	              </li>
-	              <li>
-	                <a href="javascript:void(0);">添加类别</a>
 	              </li>
 	            </ul>
 	            <div class="tab">
@@ -186,9 +183,48 @@
                     </table>
                 </div>
                 <!--右侧功能区面板结束-->
-                
               </div>
             </div>
+            
+           <div id="c_l">
+	           <div class="c_l_title">
+	              	 类别列表:
+	               <a href="javascript:add_category();" style="float:right;">添加类别</a>
+	           </div>
+	            <table>
+	                <tr class="head">
+	                    <td>id</td>
+	                    <td>名称</td>
+	                    <td>操作</td>
+	                </tr>
+	            </table>
+       		</div>
+	        <!--类别添加/修改窗-->
+	        <div id="category_window">
+	            <table>
+	                <tr>
+	                    <td>类别:</td>
+	                    <td>
+	                        <input type="text" id="category_value">
+	                    </td>
+	                </tr>
+	                <tr>
+	                	<td></td>
+	                    <td>
+	                        <span class="error" id="category_error"></span>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td></td>
+	                    <td>
+	                        <button onclick="save_category(this);">保存</button>
+	                        &nbsp;
+	                        <button onclick="close_category_window();">返回</button>
+	                    </td>
+	                </tr>
+	            </table>
+	        </div>
+            
           </div>
 		</div>        
 	</div>   

@@ -3,6 +3,10 @@
         sid : 0,
         section_btns : null
     };
+    var category = {
+        id : 0,
+        name : ""
+    }
 
     $(function() {
         //选项卡显示/隐藏
@@ -33,12 +37,37 @@
               if(id == "s_l") {
                 //加载板块列表面板
                _init_section_list_panel();
+              }else if(id == "c_l") {
+                  //加载类别列表
+                  _load_category_list();
               }
             }else {
               $(this).hide();
             }
           });
         });
+    }
+
+    /**
+     * [[加载类别列表]]
+     */
+    function _load_category_list() {
+        $("#category_window").hide();
+        var url = "admin/category/list.html";
+        var ele;
+        $.post(
+            url,
+            {},
+            function(json) {
+                var table = $("#c_l").find("table");
+                table.empty();
+                $.each(json, function(index, category) {
+                   ele = "<tr><td>" + category.id + "</td><td>" + category.name + "</td><td>\                                                         <a href='javascript:void(0);' onclick='javascript:modify_category(this);'>修改</a>&nbsp;<a href='javascript:void(0);' onclick='delete_category(this);'>删除</a></td></tr>";
+                    table.append($(ele));
+                });
+            },
+            "json"
+        );
     }
 
     /**
@@ -228,7 +257,9 @@
                                  "name" : name_value,
                                  "manager" : manager_value
                              },
-                             _handle_response,
+                             function(json) {
+                                _handle_response(json, _init_section_list_panel);  
+                             },
                              "json"
                          );
                      }
@@ -241,12 +272,12 @@
      /**
       * [_handle_response 处理请求结果]
       * @param  {[type]} json [返回的json数据]
+      *  @param {Function} [[回调函数]]                     
       */
-     function _handle_response(json) {
+     function _handle_response(json, callback) {
         if(json.result == "1") {
             show_success(json.message);
-            //重新加载
-            _init_section_list_panel();
+            callback();
         }else if(json.result == "0") {
             show_error(json.message);
         }
@@ -261,7 +292,9 @@
             $.post(
                 url,
                 {"id" : section.sid},
-                _handle_response,
+                function(json) {
+                    _handle_response(json, _init_section_list_panel);  
+                 },
                 "json"
             );
         }
@@ -286,7 +319,9 @@
                 "id" : section.sid,
                 "name" : name.val().trim()
             },
-           _handle_response,
+           function(json) {
+              _handle_response(json, _init_section_list_panel);  
+           },
            "json"
         )
     }
@@ -315,7 +350,9 @@
                 "removeManagers" : selected_mamagers_str,
                 "managers" : unselected_managers_str
             },
-            _handle_response,
+            function(json) {
+                _handle_response(json, _init_section_list_panel);  
+            },
             "json"
         );
     }
@@ -366,7 +403,9 @@
                             "id" : section.sid,
                             "name" : input_value
                          },
-                         _handle_response,
+                         function(json) {
+                            _handle_response(json, _init_section_list_panel);  
+                         },
                          "json"
                     );
                 }
@@ -388,4 +427,78 @@
                $(this).hide();
            }
         });
+    }
+    
+    /**
+     * [[修改类别]]
+     * @param {[[DOM]]} link [[出发此函数的链接]]
+     */
+    function modify_category(link) {
+        var name = $(link).parent().prev()
+        category.name = name.html();
+        category.id = name.prev().html();
+        $("#category_value").html(category.name);
+        add_category();
+    }
+    
+    /**
+     * [[保存类别]]
+     * @param {[[DOM]]} btn [[保存按钮]]
+     */
+    function save_category(btn) {
+        var error_span = $("#category_error");
+        var input = $("#category_value");
+        var input_value = input.val().trim();
+        if(input_value == "") {
+            error_span.html("请输入类别名称");
+            input.focus();
+            return;
+        }
+        var url = "admin/category/save.html";
+        $.post(
+            url,
+            {
+                "id" : category.id,
+                "name" : input_value
+            },
+            function(json) {
+                _handle_response(json, _load_category_list);  
+            },
+            "json"
+        )
+    }
+    
+    /**
+     * [[关闭类别输入窗口]]
+     */
+    function close_category_window() {
+        $("#category_error").html("");
+        $("#category_value").val("");
+        $("#category_window").hide();
+    }
+
+    /**
+     * [[添加类别]]
+     */
+    function add_category() {
+        $("#category_window").show();
+    }
+
+    /**
+     * [[删除类别]]
+     * @param {[[DOM]]} link [[删除链接]]
+     */
+    function delete_category(link) {
+        var id = $(link).parent().prev().prev().html();
+        var url = "admin/category/delete.html";
+        $.post(
+            url, 
+            {
+                "id" : id
+            },
+            function(json) {
+                _handle_response(json, _load_category_list);
+            },
+            "json"
+        )
     }

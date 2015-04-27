@@ -1,5 +1,5 @@
 * {
-    font-family: "微软雅黑";
+    font-family: "宋体";
 }
 body {
     background-image: url(../images/bg.jpg);
@@ -12,6 +12,7 @@ body {
 /*主要字体*/
 .main-font {
     font-size: 12px;
+    font-family: "微软雅黑";
 }
 /*超链接*/
 a {
@@ -26,6 +27,7 @@ a:hover {
 .strong-font {
     font-size: 14px;
     font-weight: bold;
+    font-family: "微软雅黑";
 }
 /*去掉p的换行*/
 p {

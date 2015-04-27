@@ -28,22 +28,6 @@
         
          <!--主页正文-->
           <div class="index-main">
-              <!--搜索-->
-              <div class="main-search">
-                 <table>
-                     <tr>
-                        <td>&nbsp;&nbsp;</td>
-                         <td>
-                              <input type="text" class="s_i" name="search" placeholder="请输入搜索内容..." style="height:30px;width:400px;">
-                          </td>
-                          <td>
-                              <button class="search-btn">
-                                  <img src="images/search.png" style="height:26px;width:26px;">
-                              </button>
-                          </td>
-                      </tr>
-                  </table>
-              </div>
               
               <!-- 引入位置条 -->
               <jsp:include page="share/addr.jsp"></jsp:include>

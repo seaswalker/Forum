@@ -22,4 +22,8 @@
 		select * from category where id = #{id}
 	</select>
 	
+	<update id="batchUpdate" parameterType="String">
+		${sql}
+	</update>
+	
 </mapper>

@@ -117,3 +117,52 @@
     color: red;
     font-family: "宋体";
 }
+#c_l {
+	display: none;
+	margin-top: 20px;
+}
+#c_l table {
+    width: 40%;
+    margin: 5px auto 0px;
+    border-collapse: collapse;
+}
+
+#c_l table tr, #c_l table  td {
+    border: 1px #9FBCC0 solid;
+    text-align: center;
+    font-family: "宋体";
+}
+/*表格头*/
+.head td {
+    font-weight: bold;
+}
+#c_l a {
+    text-decoration: none;
+    color: blue;
+}
+#c_l a:visited {
+    color: blue;
+}
+/*类别列表头*/
+.c_l_title, c_l_title a {
+    width: 40%;
+    margin: 10px auto 0px;
+    font-family: "宋体";
+}
+#category_window {
+    position: absolute;
+    z-index: 999;
+    width: 300px;
+    height: 150px;
+    background-color: #E0F0F2;
+    top: 35%;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -75px;
+    display: none;
+}
+#category_window table {
+    width: 80%;
+    height: 70%;
+    margin: 20px auto 0px;
+}
