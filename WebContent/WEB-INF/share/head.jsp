@@ -37,7 +37,7 @@
 	      <div class="p_info">
 	          <table align="right">
 	              <tr>
-	                  <td>
+	                  <td class="tr_set">
 	                      <span class="strong-font">${sessionScope.user.username}</span>
 	                  </td>
 	                  <td class="main-font">
@@ -54,11 +54,16 @@
 	                  </td>
 	              </tr>
 	              <tr>
-	                  <td colspan="3" class="tr_set main-font">
+	              	  <td class="main-font tr_set">
 	                  	  <!-- 后台入口 -->
-	                  	  <c:if test="${sessionScope.user.isAdmin}">
+	                  	  <c:if test="${sessionScope.user.isAdmin || sessionScope.user.isManager}">
 	                  	  		<a href="admin/index.html">进入后台</a>
 	                  	  </c:if>
+	                  </td>
+	              	  <td class="main-font">
+	                      &nbsp;|
+	                  </td>
+	                  <td class="tr_set main-font">
 	                      <a href="user/set.html">设置</a>
 	                  </td>
 	              </tr>
@@ -73,14 +78,14 @@
 	               <table class="main-font">
 	                   <tr>
 	                       <td>
-	                          	 用户名&nbsp;&nbsp;
+	                          	 用户名:
 	                       </td>
 	                       <td>
 	                           <input type="text" name="username">
 	                       </td>
 	                       <td class="border">
 	                           <input type="checkbox" name="autologin" id="checkbox">
-	                           <label for="checkbox">自动登录&nbsp;&nbsp;</label>
+	                           <label for="checkbox">自动登录&nbsp;</label>
 	                       </td>
 	                       <td>
 	                           <a href="#">找回密码</a>
@@ -88,7 +93,7 @@
 	                   </tr>
 	                   <tr>
 	                       <td>
-	                          	 密码&nbsp;&nbsp;&nbsp;
+	                          	 密码:
 	                       </td>
 	                       <td>
 	                           <input type="password" name="password">

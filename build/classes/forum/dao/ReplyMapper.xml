@@ -17,7 +17,6 @@
 			<result property="avatar" column="u_avatar"/>
 			<result property="isAdmin" column="u_isAdmin"/>
 			<result property="visible" column="u_visible"/>
-			<result property="isManager" column="u_isManager"/>
 		</association>
 	</resultMap>
 	
@@ -36,8 +35,7 @@
 			u.email as u_email,
 			u.avatar as u_avatar,
 			u.isAdmin as u_isAdmin,
-			u.visible as u_visible,
-			u.isManager as u_isManager
+			u.visible as u_visible
 			
 			from reply r join user u on u.id = r.authorid
 			<!-- 拼接where语句，此处做了简化处理 直接预测可能会用到的条件? -->

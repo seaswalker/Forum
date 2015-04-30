@@ -153,16 +153,17 @@
             }
             if(!$(this).hasClass("folder")) {
                 $(section.section_btns.get(0)).attr("disabled", true);
-                //如果尚未设置版主，那么删除版主不可用
-                var old_manager = this.getAttribute("old_manager");
-                if(old_manager == "") {
-                    section.section_btns.get(3).setAttribute("disabled", true);
-                }else {
-                    //设置版主选择列表
-                    _init_manager_select(old_manager);
-                }
                 //添加子版块面板可能是打开的，关闭
                 $("#add_child").hide().prev().show();
+            }
+            //如果尚未设置版主，那么删除版主不可用
+            var old_manager = this.getAttribute("old_manager");
+            if(old_manager == "") {
+                section.section_btns.get(3).setAttribute("disabled", true);
+                _remove_section_managers();
+            }else {
+                //设置版主选择列表
+                _init_manager_select(old_manager);
             }
             _reset_section_ops();   
         });
@@ -174,16 +175,24 @@
        * @param  {[type]} old_manager [description]
        */
       function _init_manager_select(old_manager) {
-        var array = old_manager.split(",");
+        var array = old_manager.split(" ");
         var manager, option;
         var $select = $("#managers");
-        for(var i = 0;i < array.length;i ++) {
+        _remove_section_managers();
+        for(var i = 1;i < array.length;i ++) {
             manager = array[i];
             option = $("<option></option>");
             option.val(manager).html(manager);
             $select.append(option);
         }
       }
+
+    /**
+     * [[移除版主列表内容]]
+     */
+    function _remove_section_managers() {
+        $("#managers option:gt(0)").remove();
+    }
 
       /**
        * [_reset_section_ops 重置板块操作面板，即显示op_default面板]

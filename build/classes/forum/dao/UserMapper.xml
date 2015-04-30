@@ -15,7 +15,7 @@
 	</delete>
 	
 	<insert id="save" parameterType="forum.model.User">
-		insert into user values(null, #{username}, #{password}, #{avatar}, #{email}, #{visible}, #{isAdmin}, #{isManager})
+		insert into user values(null, #{username}, #{password}, #{avatar}, #{email}, #{visible}, #{isAdmin})
 	</insert>
 	
 	<update id="update" parameterType="forum.model.User">
@@ -35,7 +35,11 @@
 	</update>
 	
 	<select id="getSectionIds" parameterType="int" resultType="int">
-		select us.sid from user_section us where us.uid = #{userid}
+		select us.sid from user_section us where us.uid = #{userId}
+	</select>
+	
+	<select id="getShieldSections" parameterType="int" resultType="forum.model.Shield">
+		select us.sid as sectionId, us.endtime as endTime from user_shield us where uid = #{userId}
 	</select>
 	
 	<!-- 查找User -->
@@ -52,6 +56,15 @@
 					and email = #{email}
 				</if>
 			</where>
+	</select>
+	
+	<!-- 封禁用户 -->
+	<insert id="shield">
+		insert into user_shield values(null, #{userId}, #{sectionId}, #{endTime})
+	</insert>
+	
+	<select id="queryCount" parameterType="String" resultType="int">
+		${sql}
 	</select>
 	
 </mapper>

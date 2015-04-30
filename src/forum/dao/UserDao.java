@@ -1,10 +1,13 @@
 package forum.dao;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import forum.dao.base.BaseDao;
+import forum.model.Shield;
 import forum.model.User;
 
 @Repository("userDao")
@@ -19,6 +22,19 @@ public interface UserDao extends BaseDao<User> {
 	 * 查出关联的板块id
 	 * 如果用户为版主时需要用到
 	 */
-	public List<Integer> getSectionIds(int userid);
+	public List<Integer> getSectionIds(int userId);
+	
+	/**
+	 * 查出被哪些板块封禁
+	 */
+	public List<Shield> getShieldSections(int userId);
+	
+	/**
+	 * 关小黑屋
+	 * @param userId 被封禁的id
+	 * @param sectionId 被哪个板块封禁
+	 * @param endTime 到期时间
+	 */
+	public void shield(@Param("userId") int userId, @Param("sectionId") int sectionId, @Param("endTime") Date endTime);
 	
 }

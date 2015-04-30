@@ -4,7 +4,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import forum.model.User;
-import forum.util.DataUtil;
 
 /**
  * 检查管理员和版主权限
@@ -20,17 +19,20 @@ public class ManagerTag extends TagSupport {
 	 */
 	private int sid;
 	
+	/**
+	 * 此方法没有考虑被封禁用户也是此板块版主或者是总版主的情况
+	 * 如果考虑的话需要回复数量 + 1次查询，势必会造成很大的性能浪费，所以把这部分工作提交封禁请求后去做
+	 */
 	@Override
 	public int doStartTag() throws JspException {
 		Object object = pageContext.getSession().getAttribute("user");
-		//如果没有登录那么没有权限
 		if(object == null) {
 			pageContext.setAttribute("isManager", false);
 		}else {
 			User user = (User) object;
 			if(user.getIsAdmin()) {
 				pageContext.setAttribute("isManager", true);
-			}else if(DataUtil.isValid(user.getSections()) && user.getSections().contains(sid)) {
+			}else if(user.isManagerOfSection(sid)) {
 				pageContext.setAttribute("isManager", true);
 			}else {
 				pageContext.setAttribute("isManager", false);

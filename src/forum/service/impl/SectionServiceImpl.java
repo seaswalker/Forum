@@ -122,7 +122,7 @@ public class SectionServiceImpl extends BaseServiceImpl<Section> implements Sect
 	
 	@Override
 	public void addManager(int id, String name) {
-		String sql = "update section set manager = concat_ws(' ', manager, '" + name + "') where id = " + id;
+		String sql = "update section set manager = concat_ws(' ' , manager, '" + name + "') where id = " + id;
 		sectionDao.batchUpdate(sql);
 		updateUser_Section(id, name);
 	}

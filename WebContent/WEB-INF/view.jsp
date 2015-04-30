@@ -24,7 +24,9 @@
     <script src="ckeditor/ckeditor.js"></script>
     <script src="script/ListenerUtil.js"></script>
     <script src="script/post.js"></script>
+    <script src="script/jquery-1.11.1.min.js"></script>
     <script src="script/view.js"></script>
+    <script src="script/tips.js"></script>
     <script type="text/javascript">
     	ListenerUtil.addListener(window, "load", config, false);
 	    //全局变量 记录ckeditor

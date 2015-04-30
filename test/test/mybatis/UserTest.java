@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import forum.dao.UserDao;
+import forum.model.Shield;
 import forum.model.User;
 import forum.service.UserService;
 
@@ -32,6 +33,12 @@ public class UserTest extends TestBase {
 	public void getSectionIds() {
 		List<Integer> ids = userDao.getSectionIds(2);
 		System.out.println(ids.size());
+	}
+	
+	@Test
+	public void shield() {
+		List<Shield> shields = userDao.getShieldSections(2);
+		System.out.println(shields.size());
 	}
 	
 }

@@ -4,7 +4,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import forum.model.User;
-import forum.util.DataUtil;
 
 /**
  * 作者或版主或管理员
@@ -27,10 +26,8 @@ public class AuthorOrManagerTag extends TagSupport {
 				return EVAL_BODY_INCLUDE;
 			}
 			//版主
-			if(DataUtil.isValid(user.getSections())) {
-				if(user.getSections().contains(sid)) {
-					return EVAL_BODY_INCLUDE;
-				}
+			if(user.isManagerOfSection(sid)) {
+				return EVAL_BODY_INCLUDE;
 			}
 		}
 		return SKIP_BODY;

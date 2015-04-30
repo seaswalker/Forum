@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forum.service.UserService;
+
 /**
  * 用户
  * @author skywalker
@@ -20,10 +22,12 @@ public class User implements Serializable {
 	private String avatar;
 	//是否是管理员
 	private boolean isAdmin = false;
-	//是否是版主
+	//是否是版主，共jsp页面使用，因为jstl无法调用对象方法
 	private boolean isManager = false;
 	//哪些板块的版主
 	private List<Integer> sections = new ArrayList<Integer>();
+	//被哪些板块封禁
+	private List<Shield> shieldSections = new ArrayList<Shield>();
 	//可见，false就关小黑屋
 	private boolean visible = true;
 	
@@ -54,11 +58,49 @@ public class User implements Serializable {
 		return sb.toString();
 	}
 	
+	/**
+	 * 是否是sectionid板块的版主
+	 */
+	public boolean isManagerOfSection(int sectionId) {
+		return sectionId > 0 && sections.contains(sectionId);
+	}
+	
+	/**
+	 * 是否被此板块封禁
+	 * 如果被封禁，那么返回此Shield对象，客户端可以利用返回是否为空进行判断
+	 */
+	public Shield hasShieldedBySection(int sectionId) {
+		if(sectionId > 0) {
+			for(Shield shield : shieldSections) {
+				if(shield.getSectionId() == sectionId) {
+					return shield;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public boolean getIsManager() {
 		return isManager;
 	}
-	public void setManager(boolean isManager) {
-		this.isManager = isManager;
+	
+	/**
+	 * 设置版主的板块id
+	 */
+	public void initSections(UserService userService) {
+		sections.addAll(userService.getSectionIds(id));
+		isManager = sections.size() > 0;
+	}
+	
+	/**
+	 * 初始化被封禁的板块
+	 */
+	public void initShieldSections(UserService userService) {
+		shieldSections.addAll(userService.getShieldSections(id));
+	}
+	
+	public List<Shield> getShieldSections() {
+		return shieldSections;
 	}
 	public List<Integer> getSections() {
 		return sections;

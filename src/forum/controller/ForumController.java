@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import forum.model.Article;
 import forum.model.Category;
+import forum.model.Shield;
 import forum.model.User;
 import forum.model.view.AddrItem;
 import forum.model.view.PageBean;
@@ -47,6 +48,13 @@ public class ForumController {
 	 */
 	@RequestMapping
 	public String forum(Integer pn, Integer cg, String type, int sid, HttpServletRequest request, Model model, HttpSession session) {
+		//检查用户是否被此板块封禁
+		User user = (User) session.getAttribute("user");
+		Shield shield = null;
+		if((shield = user.hasShieldedBySection(sid)) != null) {
+			model.addAttribute("shield", shield);
+			return "shield_error";
+		}
 		//板块点击数量加一
 		sectionService.addClickCount(sid);
 		ServletContext context = request.getServletContext();

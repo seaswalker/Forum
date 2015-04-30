@@ -45,7 +45,7 @@ function _toElementsArray(elements) {
     for(var i = 0;i < elements.length;i ++) {
         ele = elements[i];
         error_span = _getErrorSpan(ele);
-        element = new Element(ele, ele.name + "Focus", ele.name + "Blur", error_span.firstChild.nodeValue,      error_span.className, error_span);
+        element = new Element(ele, ele.name + "Focus", ele.name + "Blur", error_span.firstChild.nodeValue, error_span.className, error_span);
         elements[i] = element;
     }
 }
@@ -163,8 +163,8 @@ function repasswordBlur(object) {
     if(!_checkPassword(object, false)) {
         return;
     } 
-    var repassword = object.element.value;
-    var password = document.forms[1].password.value;
+    var repassword = object.element.value.trim();
+    var password = document.getElementById("register_form").password.value.trim();
     if(repassword != password) {
         Register.passed = _showRegisterError(object, "密码不一致");
     }else {

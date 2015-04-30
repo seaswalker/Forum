@@ -23,6 +23,11 @@ public interface BaseDao<T> {
 	public void save(T entity);
 	
 	/**
+	 * 查询数量
+	 */
+	public int queryCount(@Param("sql") String sql);
+	
+	/**
 	 * 批量更新
 	 */
 	public void batchUpdate(@Param("sql") String sql);

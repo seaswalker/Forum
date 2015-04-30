@@ -35,10 +35,10 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
 				User user = DataUtil.generateUserFromCookie(cookie);
 				User result = userService.login(user.getUsername(), user.getPassword());
 				if(result != null) {
-					//如果用户是版主，查出板块号
-					if(result.getIsManager()) {
-						result.setSections(userService.getSectionIds(result.getId()));
-					}
+					//查出是版主的板块号
+					result.initSections(userService);
+					//被封禁的板块
+					result.initShieldSections(userService);
 					session.setAttribute("user", result);
 				}
 			}

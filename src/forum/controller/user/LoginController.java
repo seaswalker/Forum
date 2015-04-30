@@ -40,6 +40,10 @@ public class LoginController {
 				json.addElement("result", "0").addElement("message", "用户名或密码错误");
 			}else {
 				json.addElement("result", "1");
+				//初始化版主板块id
+				user.initSections(userService);
+				//被封禁的板块
+				user.initShieldSections(userService);
 				//存入session
 				session.setAttribute("user", user);
 				//存入cookie

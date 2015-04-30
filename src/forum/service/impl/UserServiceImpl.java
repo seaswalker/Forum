@@ -1,5 +1,6 @@
 package forum.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import forum.dao.UserDao;
 import forum.dao.base.BaseDao;
+import forum.model.Shield;
 import forum.model.User;
 import forum.service.UserService;
 import forum.service.base.BaseServiceImpl;
@@ -61,8 +63,25 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	}
 
 	@Override
-	public void shield(int uid, int sid) {
-		
+	public void shield(int uid, int sid, int days) {
+		Calendar endTime = Calendar.getInstance();
+		endTime.add(Calendar.DAY_OF_MONTH, days);
+		userDao.shield(uid, sid, endTime.getTime());
+	}
+	
+	@Override
+	public int isManager(int userId, int sectionId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select count(us.id) from user_section us where us.uid = ").append(userId)
+			.append(" and us.sid in (select s1.id from section s1 where s1.id = ").append(sectionId)
+			.append(" union select s2.id from section s2 where s2.id = (select pid from section where id = ").append(sectionId)
+			.append("))");
+		return userDao.queryCount(sql.toString());
+	}
+	
+	@Override
+	public List<Shield> getShieldSections(int userId) {
+		return userDao.getShieldSections(userId);
 	}
 
 }

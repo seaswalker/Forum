@@ -115,6 +115,24 @@ function do_shield() {
         error_span.innerHTML = "格式非法";
         input.focus();
     }else {
-        
+        error_span.innerHTML = "正在提交..."
+        $.post(
+            "user/shield.html",
+            {
+                "uid" : shield.user_id,
+                "sid" : shield.section_id,
+                "days" : input_value
+            },
+            function(json) {
+                if(json.result == "0") {
+                    error_span.innerHTML = json.message;
+                }else if(json.result == "1") {
+                    $("#shield_window").hide();
+                    show_success(json.message);
+                    //TODO 
+                    //window.location.reload();
+                }
+            }
+        )
     }
 }
