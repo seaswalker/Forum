@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import forum.dao.base.BaseDao;
 import forum.model.Shield;
+import forum.model.ShieldSearchResult;
 import forum.model.User;
 
 @Repository("userDao")
@@ -28,6 +29,13 @@ public interface UserDao extends BaseDao<User> {
 	 * 查出被哪些板块封禁
 	 */
 	public List<Shield> getShieldSections(int userId);
+	
+	/**
+	 * 用户封禁情况查询
+	 * @param sectionIds 当前用户是版主的那些板块
+	 */
+	public List<ShieldSearchResult> shieldSearchResult(@Param("username") String username, 
+			@Param("sectionIds") List<Integer> sectionIds);
 	
 	/**
 	 * 关小黑屋

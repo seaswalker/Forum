@@ -25,6 +25,10 @@
 	<!-- 配置拦截器 -->
 	<mvc:interceptors>
 		<bean class="forum.intercepter.LoginIntercepter"></bean>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**"/>
+			<bean class="forum.intercepter.AdminIntercepter"></bean>
+		</mvc:interceptor>
 	</mvc:interceptors>
 	
 	<!-- 配置文件上传解析器 -->

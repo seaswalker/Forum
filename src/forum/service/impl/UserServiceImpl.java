@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import forum.dao.UserDao;
 import forum.dao.base.BaseDao;
 import forum.model.Shield;
+import forum.model.ShieldSearchResult;
 import forum.model.User;
 import forum.service.UserService;
 import forum.service.base.BaseServiceImpl;
@@ -82,6 +83,19 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public List<Shield> getShieldSections(int userId) {
 		return userDao.getShieldSections(userId);
+	}
+	
+	@Override
+	public List<ShieldSearchResult> shieldSearchResult(String username,
+			List<Integer> sectionIds) {
+		return userDao.shieldSearchResult(username, sectionIds);
+	}
+	
+	@Override
+	public void unshield(String username, int sid) {
+		String sql = "delete from user_shield where sid = " + sid + 
+					" and uid = (select id from user where username = '" + username + "')";
+		userDao.batchUpdate(sql);
 	}
 
 }

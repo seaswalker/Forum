@@ -3,6 +3,7 @@ package forum.service;
 import java.util.List;
 
 import forum.model.Shield;
+import forum.model.ShieldSearchResult;
 import forum.model.User;
 import forum.service.base.BaseService;
 
@@ -46,5 +47,15 @@ public interface UserService extends BaseService<User> {
 	 * @return 返回管理的板块的数量，如果返回数字大于零，也就说明是版主
 	 */
 	public int isManager(int userId, int sectionId);
+	
+	/**
+	 * 用户封禁情况查询
+	 */
+	public List<ShieldSearchResult> shieldSearchResult(String username, List<Integer> sectionIds);
+	
+	/**
+	 * 解封
+	 */
+	public void unshield(String username, int sid);
 	
 }

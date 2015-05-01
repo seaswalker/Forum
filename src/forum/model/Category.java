@@ -3,6 +3,7 @@ package forum.model;
 import java.io.Serializable;
 
 import forum.util.json.JSON;
+import forum.util.json.JSONAble;
 import forum.util.json.JSONObject;
 
 /**
@@ -10,7 +11,7 @@ import forum.util.json.JSONObject;
  * @author skywalker
  *
  */
-public class Category implements Serializable {
+public class Category implements Serializable, JSONAble {
 
 	private static final long serialVersionUID = -7532185703358157233L;
 	
@@ -36,6 +37,7 @@ public class Category implements Serializable {
 	/**
 	 * 产生一个json对象
 	 */
+	@Override
 	public JSON getJSON() {
 		JSON json = new JSONObject();
 		json.addElement("id", String.valueOf(id)).addElement("name", name);

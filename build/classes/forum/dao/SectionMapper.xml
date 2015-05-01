@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="forum.dao.SectionDao">
 
+	<cache></cache>
+
 	<!-- 顶级板块map，查询子版块，不查询最后发表 -->
 	<resultMap type="forum.model.Section" id="ParentMap">
 		<id property="id" column="s_id"/>

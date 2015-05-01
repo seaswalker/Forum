@@ -117,7 +117,7 @@ function do_shield() {
     }else {
         error_span.innerHTML = "正在提交..."
         $.post(
-            "user/shield.html",
+            "admin/user/shield.html",
             {
                 "uid" : shield.user_id,
                 "sid" : shield.section_id,
@@ -129,8 +129,7 @@ function do_shield() {
                 }else if(json.result == "1") {
                     $("#shield_window").hide();
                     show_success(json.message);
-                    //TODO 
-                    //window.location.reload();
+                    window.location.reload();
                 }
             }
         )

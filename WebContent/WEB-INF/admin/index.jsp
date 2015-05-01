@@ -12,10 +12,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" href="ico/icon.ico">
 	<title>论坛后台</title>
-	<link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/head.css">
     <link rel="stylesheet" href="css/tips.css">
     <link rel="stylesheet" href="css/admin/admin.css">
+	<link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/treeview/jquery.treeview.css">
 	<script src="script/jquery-1.11.1.min.js"></script>
 	<script src="script/treeview/jquery.treeview.js"></script>
@@ -61,8 +61,8 @@
 	              	用户管理:
 	            </div>
 	            <ul class="tab_detail">
-	              <li>
-	                <a href="javascript:void(0);">用户列表</a>
+	              <li name="u_l">
+	                <a href="javascript:void(0);">用户解封</a>
 	              </li>
 	            </ul>
             	<!--动态删除结束-->
@@ -191,7 +191,7 @@
 	              	 类别列表:
 	               <a href="javascript:add_category();" style="float:right;">添加类别</a>
 	           </div>
-	            <table>
+	            <table class="c_u_table">
 	                <tr class="head">
 	                    <td>id</td>
 	                    <td>名称</td>
@@ -224,7 +224,20 @@
 	                </tr>
 	            </table>
 	        </div>
-            
+			<!--封禁用户列表-->
+	        <div id="u_l">
+	            <!--搜索栏-->
+	            <div class="search_bar">
+	                <input type="text" id="search_value">
+	                <button onclick="search_shield(this);">搜索</button> 
+	                <br>
+	                <span class="error"></span>
+	            </div>
+	            <div class="c_l_title">
+	            	搜索结果:
+	            </div>
+	            <table class="c_u_table" id="shield_table" style="width: 60%;"></table>
+            </div>
           </div>
 		</div>        
 	</div>   

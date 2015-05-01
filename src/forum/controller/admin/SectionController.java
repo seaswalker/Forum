@@ -139,10 +139,10 @@ public class SectionController {
 	private JSON generateJSON(List<Section> sections) {
 		JSONArray array = new JSONArray();
 		for(Section section : sections) {
-			array.addObject(section.getJSONObject());
+			array.addObject(section.getJSON());
 			//遍历添加子版块
 			for(Section child : section.getChildren()) {
-				array.addObject(child.getJSONObject());
+				array.addObject(child.getJSON());
 			}
 		}
 		return array;

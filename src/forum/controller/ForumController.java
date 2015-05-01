@@ -51,7 +51,7 @@ public class ForumController {
 		//检查用户是否被此板块封禁
 		User user = (User) session.getAttribute("user");
 		Shield shield = null;
-		if((shield = user.hasShieldedBySection(sid)) != null) {
+		if(user != null && (shield = user.hasShieldedBySection(sid)) != null) {
 			model.addAttribute("shield", shield);
 			return "shield_error";
 		}

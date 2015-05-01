@@ -23,9 +23,16 @@ public abstract class JSON {
 	}
 	
 	/**
-	 * 添加一个JSON对象
+	 * 添加一个元素
 	 */
-	public JSON addObject(JSON object) {
+	public JSON addElement(String key, JSON object) {
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * 添加一个json对象
+	 */
+	public JSON addObject(JSON json) {
 		throw new UnsupportedOperationException();
 	}
 	

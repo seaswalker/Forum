@@ -121,27 +121,27 @@
 	display: none;
 	margin-top: 20px;
 }
-#c_l table {
-    width: 40%;
-    margin: 5px auto 0px;
-    border-collapse: collapse;
-}
-
-#c_l table tr, #c_l table  td {
-    border: 1px #9FBCC0 solid;
-    text-align: center;
-    font-family: "宋体";
-}
 /*表格头*/
 .head td {
     font-weight: bold;
 }
-#c_l a {
+/*列别-用户列表*/
+.c_u_table {
+    width: 40%;
+    margin: 10px auto 0px;
+    border-collapse: collapse;
+}
+
+.c_u_table tr, .c_u_table td {
+    border: 1px #9FBCC0 solid;
+    text-align: center;
+}
+.c_u_table a {
     text-decoration: none;
     color: blue;
 }
-#c_l a:visited {
-    color: blue;
+.c_u_table a:visited {
+    color: blue!important;
 }
 /*类别列表头*/
 .c_l_title, c_l_title a {
@@ -150,7 +150,7 @@
     font-family: "宋体";
 }
 #category_window {
-    position: absolute;
+    position: fixed;
     z-index: 999;
     width: 300px;
     height: 150px;
@@ -165,4 +165,19 @@
     width: 80%;
     height: 70%;
     margin: 20px auto 0px;
+}
+.red_font {
+    color: red;
+}
+.green_font {
+    color: limegreen;
+}
+#u_l {
+    text-align: center;
+    display: none;
+    margin-top: 20px;
+}
+.search_bar {
+	margin-bottom: 40px;
+	font-size: 13px;
 }

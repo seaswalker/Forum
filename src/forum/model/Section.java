@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import forum.util.json.JSON;
+import forum.util.json.JSONAble;
 import forum.util.json.JSONObject;
 
 /**
@@ -11,7 +13,7 @@ import forum.util.json.JSONObject;
  * @author skywalker
  *
  */
-public class Section implements Serializable {
+public class Section implements Serializable, JSONAble {
 
 	private static final long serialVersionUID = -5975517377515709235L;
 	
@@ -47,7 +49,8 @@ public class Section implements Serializable {
 	/**
 	 * 利用id、name、pid、manager属性产生一个jsonObject
 	 */
-	public JSONObject getJSONObject() {
+	@Override
+	public JSON getJSON() {
 		JSONObject object = new JSONObject();
 		object.addElement("id", String.valueOf(this.id)).addElement("name", this.name)
 			.addElement("pid", String.valueOf(this.pid)).addElement("manager", this.manager);

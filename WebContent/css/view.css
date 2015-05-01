@@ -144,7 +144,7 @@ blockquote {
 	font-family: "微软雅黑";
 }
 #shield_window {
-	position: absolute;
+	position: fixed;
     z-index: 999;
     width: 300px;
     height: 150px;

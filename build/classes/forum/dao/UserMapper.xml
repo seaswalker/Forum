@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="forum.dao.UserDao">
 
+	<cache></cache>
+
 	<select id="findAll" resultType="forum.model.User">
 		select * from user
 	</select>
@@ -66,5 +68,21 @@
 	<select id="queryCount" parameterType="String" resultType="int">
 		${sql}
 	</select>
+	
+	<select id="shieldSearchResult" resultType="forum.model.ShieldSearchResult">
+		select u.username, us.sid, left(us.endtime, 16) as endtime, s.name from user u 
+			join user_shield us
+				on us.uid = (select id from user where username = #{username}) and us.sid in
+				<foreach collection="sectionIds" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			join section s 
+				on s.id = us.sid
+		where u.username = #{username}
+	</select>
+	
+	<update id="batchUpdate" parameterType="String">
+		${sql}
+	</update>
 	
 </mapper>

@@ -286,7 +286,9 @@
      function _handle_response(json, callback) {
         if(json.result == "1") {
             show_success(json.message);
-            callback();
+            if(callback != undefined) {
+                callback();
+            }
         }else if(json.result == "0") {
             show_error(json.message);
         }
@@ -446,7 +448,7 @@
         var name = $(link).parent().prev()
         category.name = name.html();
         category.id = name.prev().html();
-        $("#category_value").html(category.name);
+        $("#category_value").val(category.name);
         add_category();
     }
     
@@ -507,6 +509,75 @@
             },
             function(json) {
                 _handle_response(json, _load_category_list);
+            },
+            "json"
+        )
+    }
+
+    /**
+     * [[搜索按钮]]
+     * @param {[[DOM]]} btn [[搜索按妞]]
+     */
+    function search_shield(btn) {
+        var error_span = $(btn).next().next();
+        var input = $("#search_value");
+        var input_value = input.val().trim();
+        if(input_value == "") {
+            error_span.html("请输入要搜索的用户");
+            input.focus();
+            return;
+        }
+        _load_shield_table(input_value);
+    }
+    
+    /**
+     * [[加载]]
+     * @param {String} username [[搜索的用户名]]
+     */
+    function _load_shield_table(username) {
+        //向服务器查询
+        var url = "admin/user/shield_query.html";
+        var table = $("#shield_table");
+        table.empty();
+        var ele = null;
+        $.post(
+            url,
+            {
+                "username" : username
+            },
+            function(json) {
+                if(json.length == 0) {
+                    table.append($("<tr><td colspan='4'>此用户不存在或没有被封禁</td></tr>"));
+                }else {
+                    var content = "<tr class='head'><td>id</td><td>板块</td><td>解封时间</td><td>操作</td></tr>";
+                    for(var i = 0;i < json.length;i ++) {
+                        ele = json[i];
+                        content += "<tr><td>" + ele.username + "</td><td>" + ele.name + "</td><td>" + ele.endtime + "</td><td><a href='javascript:void(0);' name='" + ele.sid + "' onclick='unshield(this);'>解封</a></td></tr>";
+                    }
+                    table.append($(content));
+                }
+            },
+            "json"
+        )
+    }
+
+    /**
+     * [[解封]]
+     * @param {DOM} link [[触发此函数的链接]]
+     *                   链接的name属性值即为板块id
+     */
+    function unshield(link) {
+        var sid = link.name;
+        var username = $(link).parent().parent().children()[0].innerHTML;
+        var url = "admin/user/unshield.html";
+        $.post(
+            url,
+            {
+                "username" : username,
+                "sid" : sid
+            },
+            function(json) {
+                _handle_response(json, function(){_load_shield_table(username)});
             },
             "json"
         )
