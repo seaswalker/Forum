@@ -39,8 +39,8 @@
 	</bean>
 	
 	<!-- 配置异常处理器 -->
-	<!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="error"></property>
-	</bean> -->
+	</bean>
 	
 </beans>
