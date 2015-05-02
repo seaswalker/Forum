@@ -31,4 +31,14 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	<!-- 判断是否是管理员 -->
+	<tag>
+		<name>admin</name>
+		<tagclass>forum.tags.AdminTag</tagclass>
+	</tag>
+	<!-- 是否是总版主 -->
+	<tag>
+		<name>topManager</name>
+		<tagclass>forum.tags.TopManagerTag</tagclass>
+	</tag>
 </taglib>

@@ -3,15 +3,19 @@
 <mapper namespace="forum.dao.SectionDao">
 
 	<cache></cache>
-
-	<!-- 顶级板块map，查询子版块，不查询最后发表 -->
-	<resultMap type="forum.model.Section" id="ParentMap">
+	
+	<!-- 不需要最后发表 -->
+	<resultMap type="forum.model.Section" id="BaseMap">
 		<id property="id" column="s_id"/>
 		<result property="name" column="s_name"/>
 		<result property="pid" column="s_pid"/>
 		<result property="manager" column="s_manager"/>
 		<result property="clickcount" column="s_clickcount"/>
 		<result property="articlecount" column="s_articlecount"/>
+	</resultMap>
+
+	<!-- 顶级板块map，查询子版块，不查询最后发表 -->
+	<resultMap type="forum.model.Section" id="ParentMap" extends="BaseMap">
 		<!-- 返回子版块集合 -->
 		<association property="children" column="s_id" select="getChildrenWithArticle"></association>
 	</resultMap>
@@ -36,7 +40,26 @@
 		</association>
 	</resultMap>
 	
-	<select id="findAllById" parameterType="int" resultMap="ParentMap">
+	<select id="findAllByIds" parameterType="String" resultMap="BaseMap">
+		<include refid="findAllByIds_sql"></include>
+		<if test="ids != null">
+			and (s.id in (${ids}) or s.pid in (${ids}))
+		</if>
+	</select>
+	
+	<select id="findAllByIdsWithLastReply" parameterType="String" resultMap="ParentMap">
+		<include refid="findAllByIds_sql"></include>
+		<choose>
+			<when test="ids != null">
+				and s.id in (${ids})
+			</when>
+			<otherwise>
+				and pid = 0
+			</otherwise>
+		</choose>
+	</select>
+	
+	<sql id="findAllByIds_sql">
 		select  
 			s.id as s_id,
 			s.name as s_name,
@@ -45,14 +68,8 @@
 			s.clickcount as s_clickcount,
 			s.articlecount as s_articlecount
 				from section s
-					<where>
-						and pid = 0
-						<if test="id > 0">
-							and id = #{id}
-						</if>
-						and visible = true
-					</where>
-	</select>
+					where s.visible = true 
+	</sql>
 	
 	<!-- 获取一个板块的子版块，带最后发表 -->
 	<select id="getChildrenWithArticle" parameterType="int" resultMap="ChildMap">

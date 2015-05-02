@@ -28,6 +28,11 @@ public interface UserService extends BaseService<User> {
 	public List<Integer> getSectionIds(int userId);
 	
 	/**
+	 * 是版主的顶级板块id
+	 */
+	public List<Integer> getTopSectionIds(int userId);
+	
+	/**
 	 * 被那些板块封禁
 	 * @param userId用户id
 	 */

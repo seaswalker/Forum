@@ -26,7 +26,7 @@ public class SectionTest {
 	
 	@Test
 	public void findAll() {
-		List<Section> tops = sectionDao.findAllById(11);
+		List<Section> tops = sectionDao.findAllByIdsWithLastReply(null);
 		System.out.println(tops.size());
 	}
 	

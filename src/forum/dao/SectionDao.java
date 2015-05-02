@@ -28,9 +28,15 @@ public interface SectionDao extends BaseDao<Section> {
 	public List<Section> getChildrenWithArticle(int id);
 	
 	/**
-	 * 获取特定板块下的所有板块
-	 * @param id 顶级板块id，如果不需要此参数，传负值
+	 * 获取一组板块下的所有板块，不需要最后发表
+	 * @param ids 顶级板块id 格式1,2,3
+	 * ids如果为空，那么查询所有
 	 */
-	public List<Section> findAllById(@Param("id") int id);
+	public List<Section> findAllByIds(@Param("ids") String ids);
+	
+	/**
+	 * 子版块查出最后发表
+	 */
+	public List<Section> findAllByIdsWithLastReply(@Param("ids") String ids);
 	
 }

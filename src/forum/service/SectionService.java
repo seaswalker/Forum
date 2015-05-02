@@ -28,10 +28,15 @@ public interface SectionService extends BaseService<Section> {
 	public void addClickCount(int sectionid);
 	
 	/**
-	 * 获取顶级板块以及子版块
-	 * @param id 顶级板块id
+	 * 获取顶级板块以及子版块， 不含最后发表
+	 * @param ids 顶级板块id 格式1,2,3
 	 */
-	public List<Section> findAllById(int id);
+	public List<Section> findAllByIds(String ids);
+	
+	/**
+	 * 含最后发表
+	 */
+	public List<Section> findAllByIdsWithLastReply(String ids);
 	
 	/**
 	 * 删除版主

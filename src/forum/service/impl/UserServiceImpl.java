@@ -62,6 +62,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	public List<Integer> getSectionIds(int userid) {
 		return userDao.getSectionIds(userid);
 	}
+	
+	@Override
+	public List<Integer> getTopSectionIds(int userId) {
+		return userDao.getTopSectionIds(userId);
+	}
 
 	@Override
 	public void shield(int uid, int sid, int days) {

@@ -31,6 +31,11 @@ public interface UserDao extends BaseDao<User> {
 	public List<Shield> getShieldSections(int userId);
 	
 	/**
+	 * 当版主的顶级板块
+	 */
+	public List<Integer> getTopSectionIds(int userId);
+	
+	/**
 	 * 用户封禁情况查询
 	 * @param sectionIds 当前用户是版主的那些板块
 	 */

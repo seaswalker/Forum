@@ -2,6 +2,7 @@ package forum.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import forum.service.UserService;
@@ -24,10 +25,14 @@ public class User implements Serializable {
 	private boolean isAdmin = false;
 	//是否是版主，共jsp页面使用，因为jstl无法调用对象方法
 	private boolean isManager = false;
-	//哪些板块的版主
-	private List<Integer> sections = new ArrayList<Integer>();
+	//哪些顶级板块板块的版主
+	private List<Integer> topSections = new ArrayList<Integer>();
+	//二级板块的版主，含有顶级板块的id
+	private List<Integer> secondSections = new ArrayList<Integer>();
 	//被哪些板块封禁
 	private List<Shield> shieldSections = new ArrayList<Shield>();
+	//顶级板块id字符串1,2,3
+	private String topSectionsStr;
 	//可见，false就关小黑屋
 	private boolean visible = true;
 	
@@ -62,7 +67,7 @@ public class User implements Serializable {
 	 * 是否是sectionid板块的版主
 	 */
 	public boolean isManagerOfSection(int sectionId) {
-		return sectionId > 0 && sections.contains(sectionId);
+		return sectionId > 0 && secondSections.contains(sectionId);
 	}
 	
 	/**
@@ -88,8 +93,9 @@ public class User implements Serializable {
 	 * 设置版主的板块id
 	 */
 	public void initSections(UserService userService) {
-		sections.addAll(userService.getSectionIds(id));
-		isManager = sections.size() > 0;
+		topSections.addAll(userService.getTopSectionIds(id));
+		secondSections.addAll(userService.getSectionIds(id));
+		isManager = secondSections.size() > 0;
 	}
 	
 	/**
@@ -99,14 +105,27 @@ public class User implements Serializable {
 		shieldSections.addAll(userService.getShieldSections(id));
 	}
 	
+	public String getTopSectionsStr() {
+		if(topSectionsStr == null) {
+			if(topSections.size() > 0) {
+				StringBuilder sb = new StringBuilder();
+				for(Integer id : topSections) {
+					sb.append(id).append(",");
+				}
+				sb.deleteCharAt(sb.length() - 1);
+				topSectionsStr = sb.toString();
+			}
+		}
+		return topSectionsStr;
+	}
+	public List<Integer> getSecondSections() {
+		return Collections.unmodifiableList(secondSections);
+	}
+	public List<Integer> getTopSections() {
+		return Collections.unmodifiableList(topSections);
+	}
 	public List<Shield> getShieldSections() {
 		return shieldSections;
-	}
-	public List<Integer> getSections() {
-		return sections;
-	}
-	public void setSections(List<Integer> sections) {
-		this.sections = sections;
 	}
 	public boolean isVisible() {
 		return visible;

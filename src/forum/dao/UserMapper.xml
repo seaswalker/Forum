@@ -40,6 +40,10 @@
 		select us.sid from user_section us where us.uid = #{userId}
 	</select>
 	
+	<select id="getTopSectionIds" parameterType="int" resultType="int">
+		select us.sid from user_section us join section s on us.sid = s.id where s.pid = 0 and us.uid = #{userId}
+	</select>
+	
 	<select id="getShieldSections" parameterType="int" resultType="forum.model.Shield">
 		select us.sid as sectionId, us.endtime as endTime from user_shield us where uid = #{userId}
 	</select>

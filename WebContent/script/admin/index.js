@@ -93,8 +93,14 @@
         var url = "admin/section/list.html";
         var tree = $("#tree");
         tree.html("正在努力加载...");
+        //总版主id字符串
+        var top_sections_ids = document.getElementById("top_sections_ids");
+        var top_sections_ids_value = top_sections_ids == undefined ? null : top_sections_ids.value;
         $.post(
             url,
+            {
+              "topIds" : top_sections_ids_value  
+            },
             function(data) {
                 //顶级li，包围一个顶级板块及其子版块
                 var top_li;
@@ -152,14 +158,14 @@
                 section.section_btns.get(i).removeAttribute("disabled");
             }
             if(!$(this).hasClass("folder")) {
-                $(section.section_btns.get(0)).attr("disabled", true);
+                $("#add_child_btn").attr("disabled", true);
                 //添加子版块面板可能是打开的，关闭
                 $("#add_child").hide().prev().show();
             }
             //如果尚未设置版主，那么删除版主不可用
             var old_manager = this.getAttribute("old_manager");
             if(old_manager == "") {
-                section.section_btns.get(3).setAttribute("disabled", true);
+                document.getElementById("remove_manager_btn").setAttribute("disabled", true);
                 _remove_section_managers();
             }else {
                 //设置版主选择列表

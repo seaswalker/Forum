@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import forum.model.Section;
 import forum.model.view.AddrItem;
@@ -37,10 +36,9 @@ public class IndexController {
 	 * 如果为-1(默认值),那么显示所有板块
 	 */
 	@RequestMapping("/index")
-	public String index(@RequestParam(value = "psid", defaultValue = "-1") int psid, 
-			Model model, HttpServletRequest request, HttpSession session) {
+	public String index( String psid, Model model, HttpServletRequest request, HttpSession session) {
 		//获取所有板块
-		List<Section> sections = sectionService.findAllById(psid);
+		List<Section> sections = sectionService.findAllByIdsWithLastReply(psid);
 		model.addAttribute("sections", sections);
 		//TODO 此处可能会初始化多次
 		if(!hasStoredNaviMap) {

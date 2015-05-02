@@ -31,11 +31,12 @@ public class SectionController {
 	
 	/**
 	 * 使用ajax异步请求，返回json格式板块列表
+	 * @param topIds 加载哪些顶级板块以及子版块 格式为1,2,3
 	 */
 	@RequestMapping("/list")
-	public void list(HttpServletResponse response) {
+	public void list(String topIds, HttpServletResponse response) {
 		//获取所有板块
-		List<Section> sections = sectionService.findAll();
+		List<Section> sections = sectionService.findAllByIds(topIds);
 		DataUtil.writeJSON(generateJSON(sections), response, true);
 	}
 	

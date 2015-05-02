@@ -70,13 +70,18 @@ public class SectionServiceImpl extends BaseServiceImpl<Section> implements Sect
 	}
 	
 	@Override
-	public List<Section> findAllById(int id) {
-		return sectionDao.findAllById(id);
+	public List<Section> findAllByIds(String ids) {
+		return sectionDao.findAllByIds(ids);
+	}
+	
+	@Override
+	public List<Section> findAllByIdsWithLastReply(String ids) {
+		return sectionDao.findAllByIdsWithLastReply(ids);
 	}
 	
 	@Override
 	public List<Section> findAll() {
-		return findAllById(-1);
+		return findAllByIdsWithLastReply(null);
 	}
 	
 	@Override

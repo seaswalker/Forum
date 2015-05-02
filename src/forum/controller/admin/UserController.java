@@ -78,7 +78,7 @@ public class UserController {
 	public void shieldQuery(String username, HttpSession session, HttpServletResponse response) {
 		User user = (User) session.getAttribute("user");
 		JSON json = new JSONArray();
-		List<ShieldSearchResult> results = userService.shieldSearchResult(username, user.getSections());
+		List<ShieldSearchResult> results = userService.shieldSearchResult(username, user.getSecondSections());
 		for(ShieldSearchResult result : results) {
 			json.addObject(result.getJSON());
 		}
