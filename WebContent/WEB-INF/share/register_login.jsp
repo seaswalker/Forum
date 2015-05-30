@@ -32,12 +32,12 @@
             }
         }
 	</script>
-            <div class="l_d_t" id="l_d_t">
-               	<span id="l_d_t_t">欢迎登录:</span>
-                <!--关闭按钮-->
-           <span class="l_d_t_btn" onclick="hide_login();">X</span>
-       </div>
-       <div class="l_d_c">
+	<div class="l_d_t" id="l_d_t">
+		<span id="l_d_t_t">欢迎登录:</span>
+		<!--关闭按钮-->
+		<span class="l_d_t_btn" onclick="hide_login();">X</span>
+	</div>
+	<div class="l_d_c">
        		<form id="register_login">
              <table align="center" width="60%">
                  <tr>

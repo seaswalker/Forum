@@ -102,5 +102,12 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 					" and uid = (select id from user where username = '" + username + "')";
 		userDao.batchUpdate(sql);
 	}
+	
+	@Override
+	public String checkEmail(String email, String username) {
+		User user = new User(username, null, email);
+		user = userDao.find(user);
+		return (user == null) ? null : user.getEmail();
+	}
 
 }

@@ -3,9 +3,11 @@ package forum.controller.user;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import forum.service.UserService;
 import forum.util.DataUtil;
 import forum.util.StringUtil;
 import forum.util.json.JSONObject;
+import forum.util.mail.MailSenderInfo;
+import forum.util.mail.SimpleMailSender;
 
 /**
  * 用户信息修改
@@ -28,6 +32,19 @@ public class UserController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+	//邮件配置信息
+	@Value("#{properties['mail.smtp.host']}")
+	private String host;
+	@Value("#{properties['mail.smtp.auth']}")
+	private String auth;
+	@Value("#{properties['mail.smtp.from']}")
+	private String from;
+	@Value("#{properties['mail.smtp.username']}")
+	private String mailUsername;
+	@Value("#{properties['mail.smtp.password']}")
+	private String password;
+	@Value("#{properties['mail.smtp.port']}")
+	private String port;
 
 	/**
 	 * 转向个人信息设置
@@ -95,6 +112,33 @@ public class UserController {
 			json.addElement("result", "1").addElement("message", "此用户名已存在");
 		}else {
 			json.addElement("result", "0");
+		}
+		DataUtil.writeJSON(json, response);
+	}
+	
+	/**
+	 * 找回密码
+	 */
+	@RequestMapping("/find")
+	@ResponseBody
+	public void findPassword(String email, String username, HttpServletResponse response) throws MessagingException {
+		String checkedEmail = userService.checkEmail(email, username);
+		JSONObject json = new JSONObject();
+		if(!DataUtil.isValid(checkedEmail)) {
+			json.addElement("result", "0").addElement("message", "此帐号不存在!");
+		}else {
+			json.addElement("result", "1").addElement("message", "链接已经发送到您的邮箱，请于3天之内完成修改");
+			MailSenderInfo mailInfo = new MailSenderInfo();
+			mailInfo.setMailServerHost(host);
+			mailInfo.setMailServerPort(port);
+			mailInfo.setValidate(Boolean.parseBoolean(auth));
+			mailInfo.setUserName(mailUsername);
+			mailInfo.setPassword(password);
+			mailInfo.setFromAddress(from);
+			mailInfo.setToAddress(checkedEmail);
+			mailInfo.setSubject("找回密码");
+			mailInfo.setContent("<html><head></head><body><div>请务必在3天之内完成修改:</div><div><a href=\"#\">链接</a></div></body></html>");
+			SimpleMailSender.sendHtmlMail(mailInfo);
 		}
 		DataUtil.writeJSON(json, response);
 	}

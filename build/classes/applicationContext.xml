@@ -16,8 +16,17 @@
 	<!-- 自动扫描bean -->
 	<context:component-scan base-package="forum.service, forum.dao"></context:component-scan>
 	
-	<!-- 配置jdbc配置文件位置 -->
+	<!-- jdbc配置文件 -->
 	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- 加载jdbc和mail服务配置文件 -->
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:mail.properties</value>
+			</list>
+		</property>
+	</bean>
 	
 	<!-- 配置数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
