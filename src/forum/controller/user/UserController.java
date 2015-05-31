@@ -4,10 +4,12 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,6 @@ import forum.service.VerifyService;
 import forum.util.DataUtil;
 import forum.util.StringUtil;
 import forum.util.json.JSONObject;
-import forum.util.mail.MailSenderInfo;
-import forum.util.mail.SimpleMailSender;
 
 /**
  * 用户信息修改
@@ -36,19 +36,8 @@ public class UserController {
 	private UserService userService;
 	@Resource(name = "verifyService")
 	private VerifyService verifyService;
-	//邮件配置信息
-	@Value("#{properties['mail.smtp.host']}")
-	private String host;
-	@Value("#{properties['mail.smtp.auth']}")
-	private String auth;
-	@Value("#{properties['mail.smtp.from']}")
-	private String from;
-	@Value("#{properties['mail.smtp.username']}")
-	private String mailUsername;
-	@Value("#{properties['mail.smtp.password']}")
-	private String password;
-	@Value("#{properties['mail.smtp.port']}")
-	private String port;
+	@Resource(name = "mailSender")
+	private JavaMailSenderImpl mailSender;
 
 	/**
 	 * 转向个人信息设置
@@ -138,17 +127,13 @@ public class UserController {
 				String id = Verify.generateId();
 				verifyService.save(new Verify(id, user.getUsername(), email, Verify.computeExpire(), user.getId()));
 				json.addElement("result", "1").addElement("message", "链接已经发送到您的邮箱，请于3天之内完成修改");
-				MailSenderInfo mailInfo = new MailSenderInfo();
-				mailInfo.setMailServerHost(host);
-				mailInfo.setMailServerPort(port);
-				mailInfo.setValidate(Boolean.parseBoolean(auth));
-				mailInfo.setUserName(mailUsername);
-				mailInfo.setPassword(password);
-				mailInfo.setFromAddress(from);
-				mailInfo.setToAddress(user.getEmail());
-				mailInfo.setSubject("找回密码");
-				mailInfo.setContent(StringUtil.getMailContent(id));
-				SimpleMailSender.sendHtmlMail(mailInfo);
+				MimeMessage message = mailSender.createMimeMessage();
+				MimeMessageHelper helper = new MimeMessageHelper(message);
+				helper.setFrom("xsdwem7@sina.cn");
+				helper.setTo(email);
+				helper.setSubject("找回密码:");
+				helper.setText(StringUtil.getMailContent(id), true);
+				mailSender.send(message);
 			}else {
 				json.addElement("result", "0").addElement("message", "您已申请找回密码，请检查您的邮箱");
 			}
@@ -167,8 +152,12 @@ public class UserController {
 		}
 		Verify verify = verifyService.find(new Verify(id, null));
 		//如果没有此验证记录或者已经过期，转向错误页面
-		if(verify == null || verify.isExpired()) {
-			model.addAttribute("tips", "此链接不存在或已过期");
+		if(verify == null) {
+			model.addAttribute("tips", "此链接不存在");
+			return "error";
+		}else if(verify.isExpired()) {
+			model.addAttribute("tips", "此链接已过期，请重新申请");
+			verifyService.delete(id);
 			return "error";
 		}
 		model.addAttribute("verify", verify);

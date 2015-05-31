@@ -17,16 +17,7 @@
 	<context:component-scan base-package="forum.service, forum.dao"></context:component-scan>
 	
 	<!-- jdbc配置文件 -->
-	<context:property-placeholder location="classpath:jdbc.properties"/>
-	
-	<!-- 加载jdbc和mail服务配置文件 -->
-	<bean id="properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath:mail.properties</value>
-			</list>
-		</property>
-	</bean>
+	<context:property-placeholder location="classpath:jdbc.properties, classpath:mail.properties"/>
 	
 	<!-- 配置数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -56,6 +47,20 @@
 	<!-- 自动扫描mapper -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="forum.dao"></property>
+	</bean>
+	
+	<!-- 邮件发送服务 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.smtp.host}"></property>
+		<property name="username" value="${mail.smtp.username}"></property>
+		<property name="password" value="${mail.smtp.password}"></property>
+		<property name="port" value="${mail.smtp.port}"></property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+			</props>
+		</property>
 	</bean>
 	
 </beans>
