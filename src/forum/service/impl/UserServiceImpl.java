@@ -104,10 +104,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	}
 	
 	@Override
-	public String checkEmail(String email, String username) {
+	public User checkEmail(String email, String username) {
 		User user = new User(username, null, email);
-		user = userDao.find(user);
-		return (user == null) ? null : user.getEmail();
+		return userDao.find(user);
 	}
 
 }

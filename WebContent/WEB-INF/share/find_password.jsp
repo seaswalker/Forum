@@ -57,7 +57,7 @@
 			<table align="center" width="60%">
 				<tr>
 					<td>用户名:</td>
-					<td>
+					<td style="width: 212px;">
 						<input type="text" name="username"> 
 					</td>
 				</tr>

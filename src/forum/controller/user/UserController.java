@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import forum.model.User;
+import forum.model.Verify;
 import forum.service.UserService;
+import forum.service.VerifyService;
 import forum.util.DataUtil;
 import forum.util.StringUtil;
 import forum.util.json.JSONObject;
@@ -32,6 +34,8 @@ public class UserController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+	@Resource(name = "verifyService")
+	private VerifyService verifyService;
 	//邮件配置信息
 	@Value("#{properties['mail.smtp.host']}")
 	private String host;
@@ -122,25 +126,69 @@ public class UserController {
 	@RequestMapping("/find")
 	@ResponseBody
 	public void findPassword(String email, String username, HttpServletResponse response) throws MessagingException {
-		String checkedEmail = userService.checkEmail(email, username);
+		User user = userService.checkEmail(email, username);
 		JSONObject json = new JSONObject();
-		if(!DataUtil.isValid(checkedEmail)) {
+		if(user == null) {
 			json.addElement("result", "0").addElement("message", "此帐号不存在!");
 		}else {
-			json.addElement("result", "1").addElement("message", "链接已经发送到您的邮箱，请于3天之内完成修改");
-			MailSenderInfo mailInfo = new MailSenderInfo();
-			mailInfo.setMailServerHost(host);
-			mailInfo.setMailServerPort(port);
-			mailInfo.setValidate(Boolean.parseBoolean(auth));
-			mailInfo.setUserName(mailUsername);
-			mailInfo.setPassword(password);
-			mailInfo.setFromAddress(from);
-			mailInfo.setToAddress(checkedEmail);
-			mailInfo.setSubject("找回密码");
-			mailInfo.setContent("<html><head></head><body><div>请务必在3天之内完成修改:</div><div><a href=\"#\">链接</a></div></body></html>");
-			SimpleMailSender.sendHtmlMail(mailInfo);
+			//检查是否已经发送过邮件
+			Verify verify = verifyService.find(new Verify(null, user.getEmail()));
+			if(verify == null || verify.isExpired()) {
+				//保存记录
+				String id = Verify.generateId();
+				verifyService.save(new Verify(id, user.getUsername(), email, Verify.computeExpire(), user.getId()));
+				json.addElement("result", "1").addElement("message", "链接已经发送到您的邮箱，请于3天之内完成修改");
+				MailSenderInfo mailInfo = new MailSenderInfo();
+				mailInfo.setMailServerHost(host);
+				mailInfo.setMailServerPort(port);
+				mailInfo.setValidate(Boolean.parseBoolean(auth));
+				mailInfo.setUserName(mailUsername);
+				mailInfo.setPassword(password);
+				mailInfo.setFromAddress(from);
+				mailInfo.setToAddress(user.getEmail());
+				mailInfo.setSubject("找回密码");
+				mailInfo.setContent(StringUtil.getMailContent(id));
+				SimpleMailSender.sendHtmlMail(mailInfo);
+			}else {
+				json.addElement("result", "0").addElement("message", "您已申请找回密码，请检查您的邮箱");
+			}
 		}
 		DataUtil.writeJSON(json, response);
+	}
+	
+	/**
+	 * 经过邮箱的链接，修改密码
+	 * cp =>> change password
+	 */
+	@RequestMapping("/cp")
+	public String verify(String id, Model model) {
+		if(!DataUtil.isValid(id)) {
+			return "redirect:/index.html";
+		}
+		Verify verify = verifyService.find(new Verify(id, null));
+		//如果没有此验证记录或者已经过期，转向错误页面
+		if(verify == null || verify.isExpired()) {
+			model.addAttribute("tips", "此链接不存在或已过期");
+			return "error";
+		}
+		model.addAttribute("verify", verify);
+		return "verify";
+	}
+	
+	/**
+	 * 保存重置密码
+	 */
+	@RequestMapping("/cp/save")
+	public String save(String id, String password, Integer userid, Model model) {
+		if(!DataUtil.isValid(id, password) || !DataUtil.isValid(userid)) {
+			return "error";
+		}
+		//更新密码
+		userService.update(new User(userid, StringUtil.md5(password)));
+		//删除重置记录
+		verifyService.delete(id);
+		model.addAttribute("message", "密码重置成功！");
+		return "message";
 	}
 	
 }

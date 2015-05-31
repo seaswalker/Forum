@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forum.dao.VerifyDao">
+
+	<cache></cache>
+
+	<select id="find" parameterType="forum.model.Verify" resultType="forum.model.Verify">
+		select * from verify
+			<where>
+				<if test="id != null">
+					and id = #{id}
+				</if>
+				<if test="email != null">
+					and email = #{email}
+				</if>
+			</where>
+	</select>
+	
+	<update id="save" parameterType="forum.model.Verify">
+		insert into verify values(#{id}, #{email}, #{expire}, #{username}, #{userid})
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from verify where id = #{id}
+	</delete>
+
+</mapper>

@@ -67,8 +67,8 @@ public interface UserService extends BaseService<User> {
 	 * 用于密码找回，检查用户输入的数据是否存在
 	 * @param email 用户输入的邮箱
 	 * @param username 输入的用户名，可以为空
-	 * @return 邮箱地址，不存在时返回null
+	 * @return 用户
 	 */
-	public String checkEmail(String email, String username);
+	public User checkEmail(String email, String username);
 	
 }
