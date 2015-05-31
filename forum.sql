@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-05-02 12:10:52
+Date: 2015-05-31 18:51:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -56,7 +56,7 @@ CREATE TABLE `article` (
 -- Records of article
 -- ----------------------------
 INSERT INTO `article` VALUES ('1', '第一篇帖子', '<p>你妹的</p>\r\n', '2015-04-15 15:40:46', '20', '3', '12', '', '2', '3', 'skywalker', '04月18日 16:24', '2');
-INSERT INTO `article` VALUES ('2', '权限模块怎么搞?', '<p>求助</p>\r\n', '2015-04-18 15:59:43', '57', '6', '12', '', '3', '1', 'skywalker', '04月27日 09:03', '2');
+INSERT INTO `article` VALUES ('2', '权限模块怎么搞?', '<p>求助</p>\r\n', '2015-04-18 15:59:43', '59', '6', '12', '', '3', '1', 'skywalker', '04月27日 09:03', '2');
 INSERT INTO `article` VALUES ('3', '这是windows7吗', '<p>好冷清</p>\r\n', '2015-04-18 16:28:16', '3', '0', '13', '', '1', '3', 'skywalker', '04月18日 16:28', '2');
 INSERT INTO `article` VALUES ('4', '人呢，都特么死哪去了?', '<p>没看见老子来了吗</p>\r\n', '2015-04-29 12:02:57', '24', '1', '15', '', '1', '1', '习近平', '04月29日 12:03', '3');
 INSERT INTO `article` VALUES ('5', '论怎样成为大水逼', '<p>鲁雄薪</p>\r\n', '2015-05-01 19:47:21', '3', '1', '13', '', '1', '4', '习近平', '05月01日 19:48', '2');
@@ -137,7 +137,7 @@ CREATE TABLE `section` (
 -- Records of section
 -- ----------------------------
 INSERT INTO `section` VALUES ('11', 'Windows讨论区', '0', '0', '', '0', '0', '');
-INSERT INTO `section` VALUES ('12', 'Windows8.1', '11', '2', '', '44', '2', ' skywalker 习近平');
+INSERT INTO `section` VALUES ('12', 'Windows8.1', '11', '2', '', '46', '2', ' skywalker 习近平');
 INSERT INTO `section` VALUES ('13', 'Windows7讨论区', '11', '5', '', '9', '2', ' skywalker');
 INSERT INTO `section` VALUES ('14', 'Java讨论区', '0', '0', '', '0', '0', null);
 INSERT INTO `section` VALUES ('15', 'Java SE', '14', '4', '', '4', '1', null);
@@ -167,7 +167,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('2', 'skywalker', '20f3d6b07200779f6c7c2ccbc4f8a0cf', 'avatar/default.gif', 'xsdwem7@hotmail.com', '', '');
-INSERT INTO `user` VALUES ('3', '习近平', '827ccb0eea8a706c4c34a16891f84e7b', 'avatar/default.gif', 'xsdwem7@sina.cn', '', '');
+INSERT INTO `user` VALUES ('3', '习近平', 'fcea920f7412b5da7be0cf42b8c93759', 'avatar/default.gif', '985744197@qq.com', '', '');
 
 -- ----------------------------
 -- Table structure for `user_section`
@@ -204,4 +204,21 @@ CREATE TABLE `user_shield` (
 
 -- ----------------------------
 -- Records of user_shield
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `verify`
+-- ----------------------------
+DROP TABLE IF EXISTS `verify`;
+CREATE TABLE `verify` (
+  `id` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `expire` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
+  `username` varchar(255) NOT NULL,
+  `userid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of verify
 -- ----------------------------
